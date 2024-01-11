@@ -1,0 +1,219 @@
+::selection {
+  background: #40CF8E;
+  color: #0E172A;
+}
+
+.App {
+  text-align: center;
+}
+
+@media only screen and (max-width: 1000px) {
+  .mobile {
+    margin-left: 4.5vw;
+    margin-right: 4.5vw;
+  }
+}
+
+.gradient {
+  height: 100%;
+  background-image: radial-gradient(circle at var(--x) var(--y), hsl(223, 58%, 18%), transparent 30%);
+  z-index: 2;
+}
+
+.logo {
+  position: var(--pos);
+  top: var(--top);
+  left: var(--left);
+  font-size: 20px;
+  z-index: 2;
+  transition-duration: 500ms;
+  transition-property: position, top, left, text-shadow, font-size;
+}
+
+.logo-caption {
+  transition-duration: 500ms;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.fixed-gradient {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 150px; /* Adjust the height as needed */
+  background: linear-gradient(to bottom, rgb(14,23,42,1), transparent); /* Your gradient colors */
+  z-index: 1; 
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.section {
+  padding-bottom: 10vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+@media only screen and (max-width: 1000px) {
+  .section {
+    padding-bottom: 5vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+@media only screen and (max-width: 1000px) {
+  .section-padding {
+    margin-bottom: 5vh;
+  }
+}
+
+.glass-card {
+  padding-top: 5vh;
+  min-height: 9rem;
+  background: transparent;
+  border-color: transparent;
+  transition-duration: 500ms;
+  transition-property: box-shadow, background-color, backdrop-filter, opacity;
+}
+
+.glass-card:hover .card-title {
+  color: #40CF8E;
+}
+
+.glass-card:hover {
+  backdrop-filter: blur(1rem);
+  background-color: rgba(225, 225, 225, 0.1);
+  box-shadow: 0.3rem 0.3rem 0.3rem rgba(0, 0, 0, 0.1);
+  opacity: 1;
+}
+
+.project-label {
+  opacity: 1;
+  transform: translatey(0%);
+  transition-duration: 500ms;
+  transition-property: opacity, filter, transform;
+}
+
+.glass-card:hover .project-label {
+  opacity: 0;
+  transform: translateY(-50%);
+}
+
+.show-project {
+  opacity: 0;
+  transform: translatey(-135%);
+  transition-duration: 500ms;
+  transition-property: opacity, filter, transform;
+}
+
+.glass-card:hover .show-project {
+  opacity: 1;
+  transform: translateY(-185%);
+}
+
+.hidden {
+  opacity: 0;
+  filter: blue(3rem);
+  transform: translateY(100%);
+  transition-duration: 1s;
+  transition-property: opacity, filter, transform;
+}
+
+@media(prefers-reduced-motion) {
+  .hidden {
+    transition: none;
+  }
+}
+
+@media only screen and (max-width: 1000px) {
+  .hidden {
+    opacity: 0;
+    filter: blue(3rem);
+    transform: translateX(-100%);
+    transition-duration: 1s;
+    transition-property: opacity, filter, transform;
+  }
+}
+
+.show {
+  filter: blur(0);
+  transform: translateY(0%);
+  opacity: 1;
+}
+
+@media only screen and (max-width: 1000px) {
+  .show {
+    filter: blur(0);
+    transform: translateX(0%);
+    opacity: 1;
+  }
+}
+
+.project {
+  width: 49%;
+}
+
+@media only screen and (max-width: 1000px) {
+  .project {
+      width:100%;
+  }
+}
+
+.project:nth-child(2) {
+  transition-delay: 100ms;
+}
+.project:nth-child(3) {
+  transition-delay: 200ms;
+}
+
+.logo {
+  color: #40CF8E;
+}
+
+.card-body {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.icon-link {
+  color: #8497BC;
+  transition-duration: 350ms;
+  transition-property: color;
+}
+
+.footer {
+  height: 100px;
+}
+
+.icon-link:hover {
+  color: #40CF8E;
+}
+
+.icons-list {
+  height: 22px;
+}
+
+#home {
+  /* background: linear-gradient(rgba(14, 23, 42, 0.7), rgba(14, 23, 42, 1)), url('../images/pexels-tobias-bjørkli-1819650.jpg'); */
+  min-height: 100vh;
+}
