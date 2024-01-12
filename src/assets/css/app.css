@@ -20,11 +20,6 @@
   z-index: 2;
 }
 
-.card-content {
-  padding-left: 5%;
-  padding-right: 5%;
-}
-
 .logo {
   position: var(--pos);
   top: var(--top);

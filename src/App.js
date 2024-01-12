@@ -205,7 +205,7 @@ function App() {
 
                 <div class="d-flex flex-wrap">
                   <div class="project border-0 card mb-3 glass-card mx-1 hidden">
-                    <div class="card-body">
+                    <div class="card-body px-5">
                       <h5 class="card-title">WcDonalds Fast Food Mobile App</h5>
                       <p class="card-text text-wrap">
                         A user-friendly fast food mobile app clone for ordering takeaway made with React-Native and Firebase.
@@ -225,7 +225,7 @@ function App() {
                   </div>
 
                   <div class="project border-0 card mb-3 glass-card mx-1 hidden">
-                    <div class="card-body">
+                    <div class="card-body px-5">
                       <h5 class="card-title">
                         File Management System with Scrum
                       </h5>
@@ -241,7 +241,7 @@ function App() {
                   </div>
 
                   <div class="project border-0 card mb-3 glass-card mx-1 hidden">
-                    <div class="card-body">
+                    <div class="card-body px-5">
                       <h5 class="card-title">Cloudy Weather App</h5>
                       <p class="card-text">
                         Some quick example text to build on the card title and
