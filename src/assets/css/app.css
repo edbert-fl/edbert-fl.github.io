@@ -181,6 +181,9 @@
 .project:nth-child(3) {
   transition-delay: 200ms;
 }
+.project:nth-child(4) {
+  transition-delay: 300ms;
+}
 
 .logo {
   color: #40CF8E;

@@ -201,10 +201,10 @@ function App() {
 
             <div className="section projects-section">
               <div class="container mt-3">
-                <h3 class="w-100 text-start mb-3">Projects</h3>
+                <h3 class="w-100 text-start mb-3">Featured Projects</h3>
 
                 <div class="d-flex flex-wrap">
-                  <div class="project border-0 card mb-3 glass-card mx-1 hidden">
+                  <div class="project border-0 card mb-2 glass-card mx-1 hidden">
                     <div class="card-body px-5">
                       <h5 class="card-title">WcDonalds Fast Food Mobile App</h5>
                       <p class="card-text text-wrap">
@@ -225,30 +225,36 @@ function App() {
                     </div>
                   </div>
 
-                  <div class="project border-0 card mb-3 glass-card mx-1 hidden">
+                  <div class="project border-0 card mb-2 glass-card mx-1 hidden">
                     <div class="card-body px-5">
                       <h5 class="card-title">
                         File Management System with Scrum
                       </h5>
                       <p class="card-text">
                         A file management system with client server interactions
-                        and built-in admin dashboard for comprehensive
-                        monitoring.
+                        and built-in admin dashboard for monitoring, built in a
+                        team using Scrum framework.
                       </p>
                       <p class="card-text project-label">
                         Java Desktop Application
                       </p>
-                      <p class="card-text show-project">Show Project →</p>
+                      <a
+                        class="text-decoration-none"
+                        href="https://github.com/edbert-fl/scroll-manager"
+                        rel="noreferrer"
+                        target="_blank"
+                      >
+                        <p class="card-text show-project">Show Project →</p>
+                      </a>
                     </div>
                   </div>
 
-                  <div class="project border-0 card mb-3 glass-card mx-1 hidden">
+                  <div class="project border-0 card mb-2 glass-card mx-1 hidden">
                     <div class="card-body px-5">
                       <h5 class="card-title">Cloudy Weather App</h5>
                       <p class="card-text">
-                        Discover a playful weather web app with live updates,
-                        dynamic videos based on conditions, and efficient search
-                        and autocomplete features, all powered by an integrated
+                        A playful weather web app with live updates, dynamic
+                        videos based on conditions all powered by an integrated
                         API.
                       </p>
                       <p class="card-text project-label">Web Application</p>
@@ -260,6 +266,21 @@ function App() {
                       >
                         <p class="card-text show-project">Show Project →</p>
                       </a>
+                    </div>
+                  </div>
+
+                  <div class="project border-0 card mb-2 glass-card mx-1 hidden">
+                    <div class="card-body px-5">
+                      <h5 class="card-title">Stock Trading Web App</h5>
+                      <p class="card-text">
+                        A stock trading web app with real-time stock prices,
+                        enabling users to simulate buying and selling stocks
+                        using mock currency.
+                      </p>
+                      <p class="card-text project-label">Web Application</p>
+                      <p class="card-text show-project">
+                        Project cannot be showed
+                      </p>
                     </div>
                   </div>
                 </div>
