@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import "./assets/css/app.css";
 import "./assets/css/main.min.css";
-import '@fortawesome/fontawesome-free/css/all.min.css';
+import "@fortawesome/fontawesome-free/css/all.min.css";
 
 function App() {
   const gradientRef = useRef(null);
@@ -105,11 +105,16 @@ function App() {
                   <div class="col-md-6 section-padding">
                     <h3 class="text-start mb-3">About Me</h3>
                     <p class="text-start text-secondary mb-3">
-                      I played a key role in developing a coordinate tracking
-                      system for employee authentication. Optimized SQL queries
-                      for a large database, achieving a 90% increase in
-                      efficiency. Also worked on intern project that involved
-                      creating a mobile app for an employee management system.
+                      Hi, I'm Edbert, a dynamic Software Developer with a
+                      passion for creating user-friendly mobile and web
+                      products. I discovered my love for coding in high school
+                      and have since honed my skills through self-teaching.
+                      Currently pursuing a Bachelor of Advanced Computing at the
+                      University of Sydney, majoring in Computer Science and
+                      Data Science, I am driven by an unwavering commitment to
+                      excellence and enjoy pushing boundaries in software
+                      development. Join me on this exciting journey, where every
+                      line of code propels us toward the future!
                     </p>
                   </div>
                   <div class="col-md-6">
@@ -263,22 +268,44 @@ function App() {
                 crossorigin="anonymous"
               ></script>
             </div>
-            
+
             <div class="container footer">
-            <hr/>
-            <br/>
+              <hr />
+              <br />
               <div class="row">
                 <div class="col-8 align-items-start text-start">
-                  <p class="footer-text text-secondary">© 2024 Edbert Felix Lim</p>
+                  <p class="footer-text text-secondary">
+                    © 2024 Edbert Felix Lim
+                  </p>
                 </div>
                 <div class="col-4 d-flex align-items-center justify-content-end icons-list">
-                  <a href="https://www.linkedin.com/in/edbert-fl" rel="noreferrer" target="_blank" class="text-decoration-none mx-2 icon-link"><i class="fa-brands fa-linkedin fa-lg"></i></a>
-                  <a href="mailto:edbert.fl@gmail.com" rel="noreferrer" target="_blank" class="text-decoration-none mx-2 icon-link"><i class="fas fa-envelope fa-lg"></i></a>
-                  <a href="https://github.com/edbert-fl" rel="noreferrer" target="_blank" class="text-decoration-none mx-2 icon-link"><i class="fa-brands fa-github fa-lg"></i></a>
+                  <a
+                    href="https://www.linkedin.com/in/edbert-fl"
+                    rel="noreferrer"
+                    target="_blank"
+                    class="text-decoration-none mx-2 icon-link"
+                  >
+                    <i class="fa-brands fa-linkedin fa-lg"></i>
+                  </a>
+                  <a
+                    href="mailto:edbert.fl@gmail.com"
+                    rel="noreferrer"
+                    target="_blank"
+                    class="text-decoration-none mx-2 icon-link"
+                  >
+                    <i class="fas fa-envelope fa-lg"></i>
+                  </a>
+                  <a
+                    href="https://github.com/edbert-fl"
+                    rel="noreferrer"
+                    target="_blank"
+                    class="text-decoration-none mx-2 icon-link"
+                  >
+                    <i class="fa-brands fa-github fa-lg"></i>
+                  </a>
                 </div>
               </div>
             </div>
-            
           </div>
         </div>
       </body>
