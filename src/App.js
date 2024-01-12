@@ -207,9 +207,8 @@ function App() {
                   <div class="project border-0 card mb-3 glass-card mx-1 hidden">
                     <div class="card-body">
                       <h5 class="card-title">WcDonalds Fast Food Mobile App</h5>
-                      <p class="card-text">
-                        Some quick example text to build on the card title and
-                        make up the bulk of the card's content.
+                      <p class="card-text text-wrap">
+                        A user-friendly fast food mobile app clone for ordering takeaway made with React-Native and Firebase.
                       </p>
                       <p class="card-text project-label">
                         React Native Mobile App
