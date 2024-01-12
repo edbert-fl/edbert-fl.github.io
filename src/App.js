@@ -91,7 +91,7 @@ function App() {
                     <h1 class="display-1 text-primary logo-caption">
                       <small class="text-body-secondary">
                         {" "}
-                        A Software Developer.
+                        I'm a Software Developer.
                       </small>
                     </h1>
                   </div>
@@ -208,7 +208,8 @@ function App() {
                     <div class="card-body px-5">
                       <h5 class="card-title">WcDonalds Fast Food Mobile App</h5>
                       <p class="card-text text-wrap">
-                        A user-friendly fast food mobile app clone for ordering takeaway made with React-Native and Firebase.
+                        A user-friendly fast food mobile app clone for ordering
+                        takeaway made with React-Native and Firebase.
                       </p>
                       <p class="card-text project-label">
                         React Native Mobile App
@@ -230,8 +231,9 @@ function App() {
                         File Management System with Scrum
                       </h5>
                       <p class="card-text">
-                        Some quick example text to build on the card title and
-                        make up the bulk of the card's content.
+                        A file management system with client server interactions
+                        and built-in admin dashboard for comprehensive
+                        monitoring.
                       </p>
                       <p class="card-text project-label">
                         Java Desktop Application
@@ -244,8 +246,10 @@ function App() {
                     <div class="card-body px-5">
                       <h5 class="card-title">Cloudy Weather App</h5>
                       <p class="card-text">
-                        Some quick example text to build on the card title and
-                        make up the bulk of the card's content.
+                        Discover a playful weather web app with live updates,
+                        dynamic videos based on conditions, and efficient search
+                        and autocomplete features, all powered by an integrated
+                        API.
                       </p>
                       <p class="card-text project-label">Web Application</p>
                       <a
