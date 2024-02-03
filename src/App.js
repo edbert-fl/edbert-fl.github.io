@@ -83,8 +83,8 @@ function App() {
       </head>
 
       <body class="body">
-        <div ref={gradientRef} className="gradient">
-          <div ref={fixedGradientRef} className="fixed-gradient" />
+        <div ref={gradientRef} className="gradient"/>
+          <div ref={fixedGradientRef} className="fixed-gradient"/>
           <div className="mobile">
             <div className="section container mt-3" id="home">
               <header className="App-header">
@@ -234,7 +234,7 @@ function App() {
 
                 <div class="d-flex flex-wrap">
                   <div class="project border-0 card mb-2 glass-card mx-1 hidden">
-                    <div class="card-body px-5">
+                    <div class="card-body card-content">
                       <h5 class="card-title">WcDonalds Fast Food Mobile App</h5>
                       <p class="card-text text-wrap">
                         A user-friendly fast food mobile app clone for ordering
@@ -255,7 +255,7 @@ function App() {
                   </div>
 
                   <div class="project border-0 card mb-2 glass-card mx-1 hidden">
-                    <div class="card-body px-5">
+                    <div class="card-body card-content">
                       <h5 class="card-title">
                         File Management System with Scrum
                       </h5>
@@ -279,7 +279,7 @@ function App() {
                   </div>
 
                   <div class="project border-0 card mb-2 glass-card mx-1 hidden">
-                    <div class="card-body px-5">
+                    <div class="card-body card-content">
                       <h5 class="card-title">Cloudy Weather App</h5>
                       <p class="card-text">
                         A playful weather web app with live updates, dynamic
@@ -299,7 +299,7 @@ function App() {
                   </div>
 
                   <div class="project border-0 card mb-2 glass-card mx-1 hidden">
-                    <div class="card-body px-5">
+                    <div class="card-body card-content">
                       <h5 class="card-title">Stock Trading Web App</h5>
                       <p class="card-text">
                         A stock trading web app with real-time stock prices,
@@ -367,7 +367,6 @@ function App() {
               </div>
             </div>
           </div>
-        </div>
       </body>
     </div>
   );
