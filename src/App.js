@@ -4,6 +4,7 @@ import "./assets/css/main.min.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
 function App() {
+  const fixedGradientRef = useRef(null);
   const gradientRef = useRef(null);
   const logoRef = useRef(null);
 
@@ -28,7 +29,7 @@ function App() {
       const scrollY = window.scrollY;
 
       // Adjust the threshold as needed.
-      const transitionThreshold = 500;
+      const transitionThreshold = 420;
 
       if (scrollY > transitionThreshold) {
         // Once the user scrolls past the threshold, move the text to the top right corner.
@@ -39,13 +40,17 @@ function App() {
           "--shadow",
           "2px 2px 4px rgba(0, 0, 0, 0.5)"
         );
-        logoRef.current.classList.remove("display-1");
+        logoRef.current.classList.remove("logo-centered");
+
+        fixedGradientRef.current.classList.remove("hidden-gradient");
       } else {
         logoRef.current.style.setProperty("--pos", "auto");
         logoRef.current.style.setProperty("--top", "auto");
         logoRef.current.style.setProperty("--left", "auto");
         logoRef.current.style.setProperty("--shadow", "transparent");
-        logoRef.current.classList.add("display-1");
+        logoRef.current.classList.add("logo-centered");
+
+        fixedGradientRef.current.classList.add("hidden-gradient");
       }
     };
 
@@ -73,28 +78,52 @@ function App() {
   return (
     <div className="App">
       <head>
-        <title>Bootstrap demo</title>
+        <title>Edbert's Portfolio</title>
         <link href="../css/main.min.css" rel="stylesheet" />
       </head>
 
       <body class="body">
         <div ref={gradientRef} className="gradient">
-          <div className="fixed-gradient" />
+          <div ref={fixedGradientRef} className="fixed-gradient" />
           <div className="mobile">
-            <div className="section" id="home">
+            <div className="section container mt-3" id="home">
               <header className="App-header">
-                <div className="d-flex flex-wrap justify-content-center align-items-center">
-                  <h1 ref={logoRef} class="logo">
+                <div class="logo-container">
+                  <h1 ref={logoRef} class="logo logo-centered text-start">
                     Hi I'm Edbert.
                   </h1>
-                  <div className="px-3">
-                    <h1 class="display-1 text-primary logo-caption">
-                      <small class="text-body-secondary">
-                        {" "}
-                        I'm a Software Developer.
-                      </small>
-                    </h1>
-                  </div>
+                  <h1 class="text-primary logo-caption text-start">
+                    <small class="text-body-secondary">
+                      {" "}
+                      I'm a Software Developer.
+                    </small>
+                  </h1>
+                </div>
+                <div class="mobile-socials d-flex align-items-center justify-content-start icons-list">
+                  <a
+                    href="https://www.linkedin.com/in/edbert-fl"
+                    rel="noreferrer"
+                    target="_blank"
+                    class="text-decoration-none icon-link"
+                  >
+                    <i class="fa-brands fa-linkedin fa-lg"></i>
+                  </a>
+                  <a
+                    href="mailto:edbert.fl@gmail.com"
+                    rel="noreferrer"
+                    target="_blank"
+                    class="text-decoration-none icon-link"
+                  >
+                    <i class="fas fa-envelope fa-lg"></i>
+                  </a>
+                  <a
+                    href="https://github.com/edbert-fl"
+                    rel="noreferrer"
+                    target="_blank"
+                    class="text-decoration-none icon-link"
+                  >
+                    <i class="fa-brands fa-github fa-lg"></i>
+                  </a>
                 </div>
               </header>
             </div>
@@ -301,6 +330,13 @@ function App() {
                   <p class="footer-text text-secondary">
                     © 2024 Edbert Felix Lim
                   </p>
+                  <a
+                    class="text-decoration-none text-secondary footer-text"
+                    href="https://www.flaticon.com/free-icons/panda"
+                    title="panda icons"
+                  >
+                    Panda icons created by riajulislam - Flaticon
+                  </a>
                 </div>
                 <div class="col-4 d-flex align-items-center justify-content-end icons-list">
                   <a
