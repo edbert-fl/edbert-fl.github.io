@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./assets/css/app.css";
 import "./assets/css/main.min.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
@@ -7,8 +7,12 @@ function App() {
   const fixedGradientRef = useRef(null);
   const gradientRef = useRef(null);
   const logoRef = useRef(null);
+  const [smallScreen, setSmallScreen] = useState(false);
 
   useEffect(() => {
+    if (window.innerWidth <= 1000) setSmallScreen(true);
+    else setSmallScreen(false);
+
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
@@ -42,7 +46,7 @@ function App() {
         );
         logoRef.current.classList.remove("logo-centered");
 
-        fixedGradientRef.current.classList.remove("hidden-gradient");
+        if (smallScreen) fixedGradientRef.current.classList.remove("hidden-gradient");
       } else {
         logoRef.current.style.setProperty("--pos", "auto");
         logoRef.current.style.setProperty("--top", "auto");
@@ -50,7 +54,7 @@ function App() {
         logoRef.current.style.setProperty("--shadow", "transparent");
         logoRef.current.classList.add("logo-centered");
 
-        fixedGradientRef.current.classList.add("hidden-gradient");
+        if (smallScreen) fixedGradientRef.current.classList.add("hidden-gradient");
       }
     };
 
@@ -73,7 +77,7 @@ function App() {
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("scroll", handleScroll);
     };
-  }, []);
+  }, [smallScreen]);
 
   return (
     <div className="App">
@@ -83,8 +87,15 @@ function App() {
       </head>
 
       <body class="body">
-        <div ref={gradientRef} className="gradient"/>
-          <div ref={fixedGradientRef} className="fixed-gradient hidden-gradient"/>
+        <div ref={gradientRef} className="gradient">
+          {smallScreen ? (
+            <div
+              ref={fixedGradientRef}
+              className="fixed-gradient hidden-gradient"
+            />
+          ) : (
+            <div ref={fixedGradientRef} className="fixed-gradient" />
+          )}
           <div className="mobile">
             <div className="section container mt-3" id="home">
               <header className="App-header">
@@ -99,32 +110,34 @@ function App() {
                     </small>
                   </h1>
                 </div>
-                <div class="mobile-socials d-flex align-items-center justify-content-start icons-list">
-                  <a
-                    href="https://www.linkedin.com/in/edbert-fl"
-                    rel="noreferrer"
-                    target="_blank"
-                    class="text-decoration-none icon-link"
-                  >
-                    <i class="fa-brands fa-linkedin fa-lg"></i>
-                  </a>
-                  <a
-                    href="mailto:edbert.fl@gmail.com"
-                    rel="noreferrer"
-                    target="_blank"
-                    class="text-decoration-none icon-link"
-                  >
-                    <i class="fas fa-envelope fa-lg"></i>
-                  </a>
-                  <a
-                    href="https://github.com/edbert-fl"
-                    rel="noreferrer"
-                    target="_blank"
-                    class="text-decoration-none icon-link"
-                  >
-                    <i class="fa-brands fa-github fa-lg"></i>
-                  </a>
-                </div>
+                {smallScreen ? (
+                  <div class="mobile-socials d-flex align-items-center justify-content-start icons-list">
+                    <a
+                      href="https://www.linkedin.com/in/edbert-fl"
+                      rel="noreferrer"
+                      target="_blank"
+                      class="text-decoration-none icon-link"
+                    >
+                      <i class="fa-brands fa-linkedin fa-lg"></i>
+                    </a>
+                    <a
+                      href="mailto:edbert.fl@gmail.com"
+                      rel="noreferrer"
+                      target="_blank"
+                      class="text-decoration-none icon-link"
+                    >
+                      <i class="fas fa-envelope fa-lg"></i>
+                    </a>
+                    <a
+                      href="https://github.com/edbert-fl"
+                      rel="noreferrer"
+                      target="_blank"
+                      class="text-decoration-none icon-link"
+                    >
+                      <i class="fa-brands fa-github fa-lg"></i>
+                    </a>
+                  </div>
+                ) : null}
               </header>
             </div>
 
@@ -182,6 +195,7 @@ function App() {
                       </button>
                       <button class="btn btn-outline-info btn-sm">Scrum</button>
                       <button class="btn btn-outline-info btn-sm">Jira</button>
+
                     </div>
                   </div>
                 </div>
@@ -367,6 +381,7 @@ function App() {
               </div>
             </div>
           </div>
+        </div>
       </body>
     </div>
   );
