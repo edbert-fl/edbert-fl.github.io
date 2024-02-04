@@ -84,7 +84,7 @@ function App() {
 
       <body class="body">
         <div ref={gradientRef} className="gradient"/>
-          <div ref={fixedGradientRef} className="fixed-gradient"/>
+          <div ref={fixedGradientRef} className="fixed-gradient hidden-gradient"/>
           <div className="mobile">
             <div className="section container mt-3" id="home">
               <header className="App-header">
