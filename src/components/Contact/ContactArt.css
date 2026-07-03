@@ -1,0 +1,62 @@
+.contact-art {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.contact-art__canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+
+.contact-art__grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse 70% 65% at 84% 45%, black 10%, transparent 78%);
+}
+
+.contact-art__scanlines {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(255, 255, 255, 0.012) 2px,
+    rgba(255, 255, 255, 0.012) 4px
+  );
+  opacity: 0.45;
+}
+
+.contact-art__fade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(5, 5, 5, 0.96) 0%,
+    rgba(5, 5, 5, 0.82) 38%,
+    rgba(5, 5, 5, 0.35) 62%,
+    transparent 82%
+  );
+}
+
+@media (max-width: 900px) {
+  .contact-art__fade {
+    background: linear-gradient(
+      180deg,
+      rgba(5, 5, 5, 0.35) 0%,
+      rgba(5, 5, 5, 0.88) 55%,
+      rgba(5, 5, 5, 0.96) 100%
+    );
+  }
+
+  .contact-art__grid {
+    mask-image: radial-gradient(ellipse 90% 55% at 50% 18%, black 10%, transparent 75%);
+  }
+}

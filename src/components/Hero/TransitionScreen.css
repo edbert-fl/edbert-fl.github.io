@@ -1,0 +1,15 @@
+.transition-screen {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.transition-screen--work .hero__title,
+.transition-screen--work .hero__role,
+.transition-screen--work .hero__description,
+.transition-screen--experience .hero__title,
+.transition-screen--experience .hero__role,
+.transition-screen--experience .hero__description {
+  text-shadow: 0 2px 24px rgba(5, 5, 5, 0.85);
+}
+

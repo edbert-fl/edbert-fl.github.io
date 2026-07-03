@@ -1,0 +1,61 @@
+.contact-card {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1.25rem 1.35rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.35);
+  color: #f4f4f5;
+  text-decoration: none;
+  transition:
+    border-color 0.25s ease,
+    background 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.contact-card:hover,
+.contact-card--active {
+  border-color: rgba(34, 211, 238, 0.45);
+  background: rgba(34, 211, 238, 0.06);
+  box-shadow: 0 0 28px rgba(34, 211, 238, 0.12);
+}
+
+.contact-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.contact-card__label {
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+.contact-card__value {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: #a1a1aa;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.contact-card--active .contact-card__value,
+.contact-card:hover .contact-card__value {
+  color: #d4d4d8;
+}
+
+.contact-card__arrow {
+  font-family: var(--mono);
+  font-size: 1rem;
+  color: #71717a;
+  transition: color 0.25s ease, transform 0.25s ease;
+}
+
+.contact-card:hover .contact-card__arrow,
+.contact-card--active .contact-card__arrow {
+  color: #22d3ee;
+}

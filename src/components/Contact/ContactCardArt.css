@@ -1,0 +1,21 @@
+.contact-card-art {
+  width: 3rem;
+  height: 3rem;
+  flex-shrink: 0;
+  color: #71717a;
+  transition: color 0.25s ease;
+}
+
+.contact-card-art--active {
+  color: #22d3ee;
+}
+
+.contact-card-art__brand {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.contact-card-art--active .contact-card-art__brand {
+  filter: drop-shadow(0 0 8px rgba(34, 211, 238, 0.35));
+}
