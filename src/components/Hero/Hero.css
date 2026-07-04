@@ -237,9 +237,9 @@
 .hero__title {
   font-size: clamp(2.25rem, 6.5vw, 5rem);
   font-weight: 500;
-  line-height: 0.95;
+  line-height: 1.08;
   letter-spacing: -0.03em;
-  margin: 0 0 1.25rem;
+  margin: 0 0 1.5rem;
   max-width: 14ch;
 }
 
@@ -313,16 +313,24 @@
   transition: color 0.35s ease;
 }
 
-.hero__button:hover::before,
 .hero__button--active::before,
 .hero__button:focus-visible::before {
   transform: scaleX(1);
 }
 
-.hero__button:hover span,
 .hero__button--active span,
 .hero__button:focus-visible span {
   color: var(--hero-bg);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .hero__button:hover::before {
+    transform: scaleX(1);
+  }
+
+  .hero__button:hover span {
+    color: var(--hero-bg);
+  }
 }
 
 .hero__button--accent {
@@ -356,8 +364,48 @@
 }
 
 @media (max-width: 640px) {
+  .hero {
+    --hero-content-lift: 0px;
+  }
+
   .hero__cluster {
-    padding: 0 1rem 1rem;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+  }
+
+  .hero__cluster-inner {
+    align-items: center;
+    text-align: center;
+    transform: none;
+  }
+
+  .hero__content,
+  .hero__content-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .hero__name {
+    margin-bottom: 1.1rem;
+  }
+
+  .hero__title,
+  .hero__role,
+  .hero__description,
+  .hero__lede {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hero__title {
+    margin-bottom: 1.65rem;
+  }
+
+  .hero__role {
+    margin-bottom: 1.2rem;
   }
 
   .hero__content-anchor--screen {
@@ -366,14 +414,33 @@
 
   .hero__nav {
     flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    gap: 0.75rem;
+    margin-top: 2.5rem;
   }
 
   .hero__nav-item {
+    position: relative;
     width: 100%;
+    align-items: center;
+    gap: 0;
+  }
+
+  .hero__nav-hint {
+    position: absolute;
+    left: 50%;
+    top: calc(100% + 0.2rem);
+    transform: translateX(-50%);
+    padding-left: 0;
   }
 
   .hero__button {
     width: 100%;
+    justify-content: center;
+  }
+
+  .hero__tags {
     justify-content: center;
   }
 

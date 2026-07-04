@@ -26,7 +26,7 @@ export function GlitchText({
   const reduceMotion = useReducedMotion()
   const ref = useRef<HTMLElement>(null)
   const isInView = useInView(ref, { once: true, margin: '-10%' })
-  const [display, setDisplay] = useState(reduceMotion ? text : '')
+  const [display, setDisplay] = useState(reduceMotion ? text : text)
   const [settled, setSettled] = useState(!!reduceMotion)
 
   useEffect(() => {
@@ -38,7 +38,7 @@ export function GlitchText({
       return
     }
 
-    setDisplay('')
+    setDisplay(text)
     setSettled(false)
 
     const start = performance.now()
@@ -84,7 +84,12 @@ export function GlitchText({
       animate={{ opacity: startWhenVisible && !isInView ? 0 : 1 }}
       transition={{ duration: 0.3 }}
     >
-      {display}
+      <span className="glitch-text__sizer" aria-hidden="true">
+        {text}
+      </span>
+      <span className="glitch-text__display" aria-hidden="true">
+        {display}
+      </span>
     </MotionTag>
   )
 }

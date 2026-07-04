@@ -51,8 +51,26 @@ function getHudLabel(active: ActiveScreen) {
   return '01 / Intro'
 }
 
+function useMediaQuery(query: string) {
+  const [matches, setMatches] = useState(() =>
+    typeof window !== 'undefined' ? window.matchMedia(query).matches : false,
+  )
+
+  useEffect(() => {
+    const media = window.matchMedia(query)
+    const update = () => setMatches(media.matches)
+    update()
+    media.addEventListener('change', update)
+    return () => media.removeEventListener('change', update)
+  }, [query])
+
+  return matches
+}
+
 export function Hero() {
   const reduceMotion = useReducedMotion()
+  const canHover = useMediaQuery('(hover: hover) and (pointer: fine)')
+  const isMobile = useMediaQuery('(max-width: 640px)')
   const sectionRef = useRef<HTMLElement>(null)
   const navRef = useRef<HTMLDivElement>(null)
   const leaveTimeoutRef = useRef<number | undefined>(undefined)
@@ -102,17 +120,24 @@ export function Hero() {
   }
 
   const handleNavEnter = (screen: 'work' | 'experience') => {
+    if (!canHover) return
     window.clearTimeout(leaveTimeoutRef.current)
     setActiveScreen(screen)
   }
 
   const handleNavLeave = () => {
+    if (!canHover) return
     leaveTimeoutRef.current = window.setTimeout(() => {
       setActiveScreen('home')
     }, 60)
   }
 
   useEffect(() => {
+    if (!canHover) {
+      setActiveScreen('home')
+      return
+    }
+
     const nav = navRef.current
     if (!nav) return
 
@@ -124,14 +149,16 @@ export function Hero() {
 
     nav.addEventListener('focusout', handleFocusOut)
     return () => nav.removeEventListener('focusout', handleFocusOut)
-  }, [])
+  }, [canHover])
 
   const handleNavClick = (screen: 'work' | 'experience') => {
+    setActiveScreen('home')
     const targetId = screen === 'work' ? 'work' : 'experience'
     document.getElementById(targetId)?.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth' })
   }
 
   const handleMouseMove = (event: MouseEvent<HTMLElement>) => {
+    if (!canHover) return
     const section = sectionRef.current
     if (!section) return
 
@@ -150,6 +177,7 @@ export function Hero() {
   }
 
   const handleMouseLeave = () => {
+    if (!canHover) return
     mouseX.set(0)
     mouseY.set(0)
     setScreen('home')
@@ -170,12 +198,12 @@ export function Hero() {
           <motion.div className="hero__grid" style={{ translate: gridTransform }} />
           <div className="hero__scanlines" />
           <div className="hero__noise" />
-          {!reduceMotion && activeScreen === 'home' && (
+          {!isMobile && !reduceMotion && activeScreen === 'home' && (
             <HeroUfo />
           )}
         </div>
 
-        {!reduceMotion && (
+        {canHover && !reduceMotion && (
           <motion.div
             className="hero__crosshair"
             style={{ left: smoothCrosshairX, top: smoothCrosshairY }}
@@ -280,48 +308,52 @@ export function Hero() {
                 <button
                   type="button"
                   className={`hero__button hero__button--accent${activeScreen === 'work' ? ' hero__button--active' : ''}`}
-                  onMouseEnter={() => handleNavEnter('work')}
-                  onMouseLeave={handleNavLeave}
-                  onFocus={() => handleNavEnter('work')}
+                  onMouseEnter={canHover ? () => handleNavEnter('work') : undefined}
+                  onMouseLeave={canHover ? handleNavLeave : undefined}
+                  onFocus={canHover ? () => handleNavEnter('work') : undefined}
                   onClick={() => handleNavClick('work')}
-                  aria-expanded={activeScreen === 'work'}
+                  aria-expanded={canHover ? activeScreen === 'work' : undefined}
                 >
                   <span>View work</span>
                 </button>
-                <motion.span
-                  className="hero__nav-hint"
-                  initial={false}
-                  animate={{ opacity: activeScreen === 'work' ? 1 : 0, y: activeScreen === 'work' ? 0 : 4 }}
-                  transition={{ duration: 0.2 }}
-                  aria-hidden={activeScreen !== 'work'}
-                >
-                  Click me
-                </motion.span>
+                {canHover && (
+                  <motion.span
+                    className="hero__nav-hint"
+                    initial={false}
+                    animate={{ opacity: activeScreen === 'work' ? 1 : 0, y: activeScreen === 'work' ? 0 : 4 }}
+                    transition={{ duration: 0.2 }}
+                    aria-hidden={activeScreen !== 'work'}
+                  >
+                    Click me
+                  </motion.span>
+                )}
               </div>
               <div className="hero__nav-item">
                 <button
                   type="button"
                   className={`hero__button${activeScreen === 'experience' ? ' hero__button--active' : ''}`}
-                  onMouseEnter={() => handleNavEnter('experience')}
-                  onMouseLeave={handleNavLeave}
-                  onFocus={() => handleNavEnter('experience')}
+                  onMouseEnter={canHover ? () => handleNavEnter('experience') : undefined}
+                  onMouseLeave={canHover ? handleNavLeave : undefined}
+                  onFocus={canHover ? () => handleNavEnter('experience') : undefined}
                   onClick={() => handleNavClick('experience')}
-                  aria-expanded={activeScreen === 'experience'}
+                  aria-expanded={canHover ? activeScreen === 'experience' : undefined}
                 >
                   <span>Experience</span>
                 </button>
-                <motion.span
-                  className="hero__nav-hint"
-                  initial={false}
-                  animate={{
-                    opacity: activeScreen === 'experience' ? 1 : 0,
-                    y: activeScreen === 'experience' ? 0 : 4,
-                  }}
-                  transition={{ duration: 0.2 }}
-                  aria-hidden={activeScreen !== 'experience'}
-                >
-                  Click me
-                </motion.span>
+                {canHover && (
+                  <motion.span
+                    className="hero__nav-hint"
+                    initial={false}
+                    animate={{
+                      opacity: activeScreen === 'experience' ? 1 : 0,
+                      y: activeScreen === 'experience' ? 0 : 4,
+                    }}
+                    transition={{ duration: 0.2 }}
+                    aria-hidden={activeScreen !== 'experience'}
+                  >
+                    Click me
+                  </motion.span>
+                )}
               </div>
             </div>
 

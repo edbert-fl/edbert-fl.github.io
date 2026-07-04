@@ -19,7 +19,15 @@ export function AboutRobotScene({ awake }: AboutRobotSceneProps) {
   const groupRef = useRef<Group>(null)
   const spinY = useRef(0)
   const dragRef = useRef({ active: false, lastX: 0, pointerId: -1 })
-  const { gl } = useThree()
+  const { gl, camera, size } = useThree()
+  const mobile = size.width <= 720
+  const robotX = mobile ? 0 : 1.05
+
+  useEffect(() => {
+    // Desktop: camera offset with robot on the right. Mobile: both centered.
+    camera.position.set(mobile ? 0 : 1.05, mobile ? 0.08 : 0.05, mobile ? 2.85 : 2.5)
+    camera.lookAt(mobile ? 0 : 0, mobile ? 0.05 : 0, 0)
+  }, [camera, mobile])
 
   useEffect(() => {
     const canvas = gl.domElement
@@ -27,7 +35,8 @@ export function AboutRobotScene({ awake }: AboutRobotSceneProps) {
     const onPointerDown = (event: PointerEvent) => {
       const rect = canvas.getBoundingClientRect()
       const x = (event.clientX - rect.left) / rect.width
-      if (x < 0.38) return
+      // On desktop, leave the text column free; on mobile the robot sits behind the copy.
+      if (!mobile && x < 0.38) return
 
       dragRef.current = { active: true, lastX: event.clientX, pointerId: event.pointerId }
       canvas.setPointerCapture(event.pointerId)
@@ -64,14 +73,18 @@ export function AboutRobotScene({ awake }: AboutRobotSceneProps) {
       canvas.removeEventListener('pointerup', endDrag)
       canvas.removeEventListener('pointercancel', endDrag)
     }
-  }, [awake, gl])
+  }, [awake, gl, mobile])
 
   useFrame((state) => {
+    camera.position.set(mobile ? 0 : 1.05, mobile ? 0.08 : 0.05, mobile ? 2.85 : 2.5)
+    camera.lookAt(0, mobile ? 0.05 : 0, 0)
+
     if (!groupRef.current) return
     const t = state.clock.elapsedTime
     const bob = awake ? Math.sin(t * 1.4) * 0.02 : 0
     const idleWiggle = awake && !dragRef.current.active ? Math.sin(t * 0.35) * 0.06 : 0
 
+    groupRef.current.position.x = robotX
     groupRef.current.position.y = -0.12 + bob
     groupRef.current.rotation.y = spinY.current + idleWiggle
   })
@@ -87,7 +100,7 @@ export function AboutRobotScene({ awake }: AboutRobotSceneProps) {
       <pointLight position={[2, 3, 4]} intensity={1.1} color="#ffffff" />
       <pointLight position={[-2, 1, 2]} intensity={0.5} color={ACCENT} />
 
-      <group ref={groupRef} position={[1.05, 0, 0]}>
+      <group ref={groupRef} position={[robotX, 0, 0]}>
         <mesh position={[0, HEAD_Y + HEAD_HEIGHT * 0.5 + 0.12, 0]}>
           <cylinderGeometry args={[0.02, 0.02, 0.14, 6]} />
           <meshBasicMaterial color={MUTED} transparent opacity={0.55} />

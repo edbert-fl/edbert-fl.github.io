@@ -34,6 +34,62 @@
   opacity: 1;
 }
 
+@media (max-width: 720px) {
+  .about-robot--visible {
+    opacity: 0.38;
+  }
+
+  .about-robot--glitch {
+    animation-name: about-robot-glitch-in-mobile;
+  }
+}
+
+@keyframes about-robot-glitch-in-mobile {
+  0% {
+    opacity: 0;
+    transform: translateX(4%) skewX(3deg);
+    clip-path: inset(42% 0 38% 0);
+  }
+  12% {
+    opacity: 0.32;
+    transform: translateX(-2%) skewX(-2deg);
+    clip-path: inset(8% 0 72% 0);
+  }
+  24% {
+    opacity: 0.14;
+    transform: translateX(2%) skewX(1deg);
+    clip-path: inset(55% 0 12% 0);
+  }
+  36% {
+    opacity: 0.36;
+    transform: translateX(-1%);
+    clip-path: inset(18% 0 48% 0);
+  }
+  48% {
+    opacity: 0.2;
+    clip-path: inset(62% 0 8% 0);
+  }
+  60% {
+    opacity: 0.38;
+    transform: translateX(0.5%);
+    clip-path: inset(4% 0 78% 0);
+  }
+  72% {
+    opacity: 0.26;
+    clip-path: inset(28% 0 32% 0);
+  }
+  84% {
+    opacity: 0.38;
+    transform: none;
+    clip-path: inset(0 0 0 0);
+  }
+  100% {
+    opacity: 0.38;
+    transform: none;
+    clip-path: none;
+  }
+}
+
 .about-robot--glitch .about-robot__glitch-layer {
   animation: about-robot-flash 0.85s steps(1) forwards;
 }

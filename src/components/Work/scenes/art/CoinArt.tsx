@@ -6,6 +6,7 @@ import { Vector3 } from 'three'
 import {
   WORK_ACCENT,
   WORK_ART_LIFT,
+  WORK_ART_VISUAL_CENTER_Y,
   type WorkArtProps,
   workWireOpacity,
 } from './workArtTheme'
@@ -146,7 +147,7 @@ export function CoinArt({ active }: WorkArtProps) {
     const t = state.clock.elapsedTime
     if (groupRef.current) {
       const bob = active ? Math.sin(t * 1.5) * 0.02 : 0
-      groupRef.current.position.y = WORK_ART_LIFT + bob
+      groupRef.current.position.y = WORK_ART_LIFT + WORK_ART_VISUAL_CENTER_Y + bob
     }
 
     const targetFlip = active ? 1 : 0

@@ -1,8 +1,7 @@
 import { Line } from '@react-three/drei'
 import { useFrame, useThree } from '@react-three/fiber'
 import { useMemo, useRef } from 'react'
-import type { Group, Mesh } from 'three'
-import { DoubleSide, Quaternion, Vector3 } from 'three'
+import { DoubleSide, Mesh, Quaternion, Vector3, type Group } from 'three'
 import type { Line2 } from 'three-stdlib'
 import { createCowMotion, HeroCow, type CowMotionState } from './HeroCow'
 import { HeroExplosion, type ExplosionState } from './HeroExplosion'
@@ -15,7 +14,8 @@ const UFO_SCALE = 0.34
 const COW_COUNT = 3
 const MAX_LIFT = 0.55
 const LASER_SHOTS = 2
-const SHOT_DURATION = 1.35
+const SHOT_DURATION = 1.1
+const SHOT_PULSE = 0.28
 const HIT_WAIT = 6
 const EXPLOSION_DURATION = 0.9
 
@@ -27,11 +27,7 @@ const RIM_LIGHTS = Array.from({ length: 4 }, (_, index) => {
   return [Math.cos(angle) * 0.46, -0.018, Math.sin(angle) * 0.46] as [number, number, number]
 })
 
-const MISS_OFFSETS: [number, number][] = [
-  [0.28, 0.14],
-  [-0.24, 0.1],
-  [0, 0],
-]
+const MISS_OFFSET: [number, number] = [0.28, 0.14]
 
 type AttackMode = 'laser' | 'tractor'
 
@@ -142,16 +138,25 @@ export function HeroUfoScene() {
   const tractorRef = useRef<Mesh>(null)
   const tractorBeamRef = useRef<Mesh>(null)
   const laserLineRef = useRef<Line2>(null)
+  const laserTipRef = useRef<Group>(null)
   const { viewport } = useThree()
 
-  const cowSpots = useMemo(
-    () => [
+  const cowSpots = useMemo(() => {
+    const mobile = viewport.aspect < 0.9
+    if (mobile) {
+      return [
+        { x: -viewport.width * 0.3, y: -viewport.height * 0.22, z: 0.05, rot: 0.35 },
+        { x: viewport.width * 0.02, y: -viewport.height * 0.36, z: -0.08, rot: -0.25 },
+        { x: viewport.width * 0.2, y: -viewport.height * 0.18, z: 0.12, rot: 0.1 },
+      ]
+    }
+
+    return [
       { x: viewport.width * 0.12, y: -viewport.height * 0.28, z: 0.05, rot: 0.35 },
       { x: viewport.width * 0.28, y: -viewport.height * 0.32, z: -0.08, rot: -0.25 },
       { x: viewport.width * 0.2, y: -viewport.height * 0.22, z: 0.12, rot: 0.1 },
-    ],
-    [viewport.width, viewport.height],
-  )
+    ]
+  }, [viewport.width, viewport.height, viewport.aspect])
 
   const cowMotion = useRef<CowMotionState[]>(
     Array.from({ length: COW_COUNT }, () => createCowMotion()),
@@ -231,12 +236,23 @@ export function HeroUfoScene() {
         const attackT = phaseT - patrolEnd
         const shotIndex = Math.min(LASER_SHOTS - 1, Math.floor(attackT / SHOT_DURATION))
         const shotT = attackT - shotIndex * SHOT_DURATION
-
-        const zap = Math.sin(shotT * 12)
-        laserOpacity.current = zap > 0.15 ? 0.5 + zap * 0.5 : 0
-
-        const [missX, missY] = MISS_OFFSETS[shotIndex]
         const isHitShot = shotIndex === LASER_SHOTS - 1
+
+        // Single pulse per shot: one miss, then one hit.
+        if (shotT < SHOT_PULSE) {
+          const pulse = Math.sin((shotT / SHOT_PULSE) * Math.PI)
+          laserOpacity.current = 0.55 + pulse * 0.45
+        }
+
+        if (isHitShot) {
+          laserEnd.current.set(spot.x, spot.y + 0.08, spot.z)
+        } else {
+          laserEnd.current.set(
+            spot.x + MISS_OFFSET[0],
+            spot.y + 0.08 + MISS_OFFSET[1],
+            spot.z,
+          )
+        }
 
         cowMotion.current.forEach((motion, index) => {
           if (index !== targetCow) {
@@ -249,8 +265,8 @@ export function HeroUfoScene() {
           if (
             isHitShot &&
             !hitTriggered.current &&
-            laserOpacity.current > 0.88 &&
-            shotT > SHOT_DURATION * 0.45
+            laserOpacity.current > 0.85 &&
+            shotT > SHOT_PULSE * 0.45
           ) {
             hitTriggered.current = true
             motion.hidden = true
@@ -261,12 +277,6 @@ export function HeroUfoScene() {
             }
           }
         })
-
-        if (!isHitShot || !hitTriggered.current) {
-          laserEnd.current.set(spot.x + missX, spot.y + 0.08 + missY, spot.z)
-        } else {
-          laserEnd.current.set(spot.x, spot.y + 0.08, spot.z)
-        }
       } else if (phaseT < waitEnd) {
         phaseKey = 'laser-wait'
         targetX = cowHover.x
@@ -433,6 +443,22 @@ export function HeroUfoScene() {
       laserLineRef.current.visible = laserOpacity.current > 0.02
     }
 
+    if (laserTipRef.current) {
+      const tipVisible = laserOpacity.current > 0.02
+      laserTipRef.current.visible = tipVisible
+      if (tipVisible) {
+        laserTipRef.current.position.copy(laserEnd.current)
+        laserTipRef.current.scale.setScalar(0.7 + laserOpacity.current * 0.55)
+        for (const child of laserTipRef.current.children) {
+          if (!(child instanceof Mesh)) continue
+          const material = child.material
+          if (material && 'opacity' in material) {
+            material.opacity = laserOpacity.current
+          }
+        }
+      }
+    }
+
     if (tractorRef.current) {
       const material = tractorRef.current.material
       if (material && 'opacity' in material) {
@@ -505,6 +531,21 @@ export function HeroUfoScene() {
         transparent
         opacity={0}
       />
+
+      <group ref={laserTipRef} visible={false}>
+        <mesh>
+          <sphereGeometry args={[0.045, 10, 10]} />
+          <meshBasicMaterial color={LASER} transparent opacity={0} />
+        </mesh>
+        <mesh rotation={[0, 0, Math.PI / 4]}>
+          <ringGeometry args={[0.055, 0.08, 16]} />
+          <meshBasicMaterial color={LASER} transparent opacity={0} side={DoubleSide} />
+        </mesh>
+        <mesh>
+          <ringGeometry args={[0.03, 0.05, 12]} />
+          <meshBasicMaterial color="#fecaca" transparent opacity={0} side={DoubleSide} />
+        </mesh>
+      </group>
     </group>
   )
 }

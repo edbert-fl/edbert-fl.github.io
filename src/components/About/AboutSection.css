@@ -177,4 +177,20 @@
   .about__meta {
     gap: 1rem 1.5rem;
   }
+
+  .about__art-fade {
+    background: radial-gradient(
+      ellipse 90% 70% at 50% 42%,
+      rgba(5, 5, 5, 0.28) 0%,
+      rgba(5, 5, 5, 0.55) 55%,
+      rgba(5, 5, 5, 0.82) 100%
+    );
+  }
+
+  .about__header,
+  .about__lede,
+  .about__meta-value,
+  .about__paragraph {
+    text-shadow: 0 1px 12px rgba(5, 5, 5, 0.9);
+  }
 }

@@ -4,6 +4,19 @@
 
   position: relative;
   display: inline-block;
+  max-width: 100%;
+}
+
+/* Final text reserves layout; scramble is overlaid and clipped. */
+.glitch-text__sizer {
+  visibility: hidden;
+  display: block;
+}
+
+.glitch-text__display {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
 }
 
 .glitch-text--settled::before,
