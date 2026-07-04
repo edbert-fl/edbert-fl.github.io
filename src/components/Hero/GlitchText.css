@@ -7,15 +7,27 @@
   max-width: 100%;
 }
 
-/* Final text reserves layout; scramble is overlaid and clipped. */
-.glitch-text__sizer {
-  visibility: hidden;
-  display: block;
+.glitch-text__chars {
+  display: inline;
 }
 
-.glitch-text__display {
+/* Each final character owns its slot so scramble glyphs can't stretch the line
+   or clip the word after a space. */
+.glitch-text__char {
+  position: relative;
+  display: inline-block;
+}
+
+.glitch-text__char-sizer {
+  visibility: hidden;
+}
+
+.glitch-text__char-glyph {
   position: absolute;
   inset: 0;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
   overflow: hidden;
 }
 

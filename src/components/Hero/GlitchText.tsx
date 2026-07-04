@@ -3,9 +3,19 @@ import { useEffect, useRef, useState } from 'react'
 import './GlitchText.css'
 
 const CHARSET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789/<>[]{}#@$%&'
+/** Reveal pacing for letters only — spaces don't consume scramble time. */
+const MS_PER_LETTER = 95
 
 function randomChar() {
   return CHARSET[Math.floor(Math.random() * CHARSET.length)]
+}
+
+function letterCount(text: string) {
+  return text.replace(/ /g, '').length
+}
+
+function scrambleDurationFor(text: string, minimumMs: number) {
+  return Math.max(minimumMs, letterCount(text) * MS_PER_LETTER)
 }
 
 interface GlitchTextProps {
@@ -26,8 +36,9 @@ export function GlitchText({
   const reduceMotion = useReducedMotion()
   const ref = useRef<HTMLElement>(null)
   const isInView = useInView(ref, { once: true, margin: '-10%' })
-  const [display, setDisplay] = useState(reduceMotion ? text : text)
+  const [display, setDisplay] = useState(text)
   const [settled, setSettled] = useState(!!reduceMotion)
+  const chars = text.split('')
 
   useEffect(() => {
     if (startWhenVisible && !isInView) return
@@ -41,19 +52,23 @@ export function GlitchText({
     setDisplay(text)
     setSettled(false)
 
+    const letters = letterCount(text)
+    const durationMs = scrambleDurationFor(text, scrambleDurationMs)
     const start = performance.now()
     let frame = 0
 
     const tick = (now: number) => {
-      const progress = Math.min((now - start) / scrambleDurationMs, 1)
-      const revealed = Math.floor(progress * text.length)
+      const progress = Math.min((now - start) / durationMs, 1)
+      const revealedLetters = letters === 0 ? 0 : Math.floor(progress * letters)
 
+      let seenLetters = 0
       const next = text
         .split('')
-        .map((char, index) => {
+        .map((char) => {
           if (char === ' ') return ' '
-          if (index < revealed) return char
-          return randomChar()
+          const revealed = seenLetters < revealedLetters
+          seenLetters += 1
+          return revealed ? char : randomChar()
         })
         .join('')
 
@@ -72,6 +87,7 @@ export function GlitchText({
   }, [text, scrambleDurationMs, reduceMotion, startWhenVisible, isInView])
 
   const MotionTag = motion[Tag] as typeof motion.span
+  const displayChars = display.padEnd(text.length).slice(0, text.length).split('')
 
   return (
     <MotionTag
@@ -84,11 +100,20 @@ export function GlitchText({
       animate={{ opacity: startWhenVisible && !isInView ? 0 : 1 }}
       transition={{ duration: 0.3 }}
     >
-      <span className="glitch-text__sizer" aria-hidden="true">
-        {text}
-      </span>
-      <span className="glitch-text__display" aria-hidden="true">
-        {display}
+      <span className="glitch-text__chars" aria-hidden="true">
+        {chars.map((char, index) => {
+          const glyph = displayChars[index] ?? char
+          const isSpace = char === ' '
+          return (
+            <span
+              key={`${index}-${char}`}
+              className={`glitch-text__char${isSpace ? ' glitch-text__char--space' : ''}`}
+            >
+              <span className="glitch-text__char-sizer">{isSpace ? '\u00a0' : char}</span>
+              <span className="glitch-text__char-glyph">{isSpace ? '\u00a0' : glyph}</span>
+            </span>
+          )
+        })}
       </span>
     </MotionTag>
   )
