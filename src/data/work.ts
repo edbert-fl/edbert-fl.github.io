@@ -29,7 +29,7 @@ export const WORK_PROJECTS: WorkProject[] = [
     category: 'personal',
     artwork: 'video-player',
     description:
-      'Full-stack video platform inspired by YouTube: register, upload, async processing into low- and high-quality renditions with thumbnails, browse a public feed, search by title, visit channel pages, and watch with a quality toggle, including public, unlisted, and private visibility. Built with a clean-architecture .NET backend, Next.js frontend, Docker local development, and AWS for storage, messaging, and cloud-ready auth/data patterns.',
+      'Full-stack YouTube-inspired platform with direct S3 upload, async transcoding, visibility controls, and a clean-architecture .NET + Next.js stack.',
     tech: ['.NET', 'Next.js', 'Docker', 'AWS', 'S3', 'SQS'],
     links: [
       { label: 'Learn more', url: '/work/youtube-clone' },

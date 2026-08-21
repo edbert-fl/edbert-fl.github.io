@@ -96,7 +96,9 @@ function WorkPodium({
       <Podium active={active} hasArtwork={Boolean(project.artwork)} />
       {project.artwork === 'video-player' && (
         <FaceCamera>
-          <VideoPlayerArt active={active} />
+          <group position={[0, -0.2, 0]}>
+            <VideoPlayerArt active={active} />
+          </group>
         </FaceCamera>
       )}
       {project.artwork === 'coin' && <CoinArt active={active} />}
