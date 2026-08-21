@@ -1,5 +1,5 @@
 import { motion, useInView, useReducedMotion } from 'motion/react'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, type FocusEventHandler } from 'react'
 import './GlitchText.css'
 
 const CHARSET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789/<>[]{}#@$%&'
@@ -24,6 +24,9 @@ interface GlitchTextProps {
   as?: 'h1' | 'h2' | 'span' | 'p'
   scrambleDurationMs?: number
   startWhenVisible?: boolean
+  id?: string
+  tabIndex?: number
+  onFocus?: FocusEventHandler<HTMLElement>
 }
 
 export function GlitchText({
@@ -32,6 +35,9 @@ export function GlitchText({
   as: Tag = 'span',
   scrambleDurationMs = 1200,
   startWhenVisible = false,
+  id,
+  tabIndex,
+  onFocus,
 }: GlitchTextProps) {
   const reduceMotion = useReducedMotion()
   const ref = useRef<HTMLElement>(null)
@@ -92,6 +98,9 @@ export function GlitchText({
   return (
     <MotionTag
       ref={ref}
+      id={id}
+      tabIndex={tabIndex}
+      onFocus={onFocus}
       className={`glitch-text ${settled ? 'glitch-text--settled' : ''} ${className}`}
       data-text={text}
       aria-label={text}

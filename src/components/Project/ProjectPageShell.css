@@ -14,6 +14,15 @@
   overflow: clip;
 }
 
+.project-page:focus {
+  outline: none;
+}
+
+.project-page:focus-visible {
+  outline: 2px solid var(--project-accent);
+  outline-offset: -2px;
+}
+
 .project-page__bg {
   position: absolute;
   inset: 0;

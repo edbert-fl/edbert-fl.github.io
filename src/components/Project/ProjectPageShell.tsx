@@ -6,15 +6,18 @@ interface ProjectPageShellProps {
   children: ReactNode
   backTo?: string
   backLabel?: string
+  /** Accessible name for the main landmark */
+  ariaLabel?: string
 }
 
 export function ProjectPageShell({
   children,
   backTo = '/#work',
   backLabel = 'Back to work',
+  ariaLabel = 'Project case study',
 }: ProjectPageShellProps) {
   return (
-    <main id="main-content" className="project-page">
+    <main id="main-content" className="project-page" tabIndex={-1} aria-label={ariaLabel}>
       <div className="project-page__bg" aria-hidden="true">
         <div className="project-page__grid" />
         <div className="project-page__scanlines" />

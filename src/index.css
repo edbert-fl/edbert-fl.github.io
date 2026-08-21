@@ -61,6 +61,15 @@ body {
   background: #050505;
 }
 
+main#main-content {
+  outline: none;
+}
+
+main#main-content:focus-visible {
+  outline: 2px solid #22d3ee;
+  outline-offset: -2px;
+}
+
 .skip-link {
   position: absolute;
   top: 0.75rem;

@@ -6,7 +6,7 @@ import { WorkSection } from '../components/Work'
 
 export function HomePage() {
   return (
-    <main id="main-content">
+    <main id="main-content" tabIndex={-1} aria-label="Home">
       <Hero />
       <AboutSection />
       <WorkSection />
