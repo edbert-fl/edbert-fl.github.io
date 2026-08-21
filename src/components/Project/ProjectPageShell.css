@@ -1,0 +1,77 @@
+.project-page {
+  --project-bg: #050505;
+  --project-text: #f4f4f5;
+  --project-muted: #71717a;
+  --project-accent: #22d3ee;
+  --project-border: rgba(255, 255, 255, 0.1);
+  --project-body: #a1a1aa;
+
+  position: relative;
+  min-height: calc(100svh - var(--site-header-height, 3.25rem));
+  background: var(--project-bg);
+  color: var(--project-text);
+  font-family: var(--sans-tech);
+  overflow: clip;
+}
+
+.project-page__bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.project-page__grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse 80% 55% at 50% 18%, black 12%, transparent 72%);
+}
+
+.project-page__scanlines {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(255, 255, 255, 0.012) 2px,
+    rgba(255, 255, 255, 0.012) 4px
+  );
+  opacity: 0.45;
+}
+
+.project-page__inner {
+  position: relative;
+  z-index: 1;
+  width: min(1080px, 100%);
+  margin: 0 auto;
+  padding: 2rem 2rem 6rem;
+  box-sizing: border-box;
+}
+
+.project-page__back {
+  display: inline-flex;
+  margin-bottom: 1.35rem;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--project-muted);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.project-page__back:hover,
+.project-page__back:focus-visible {
+  color: var(--project-accent);
+}
+
+@media (max-width: 720px) {
+  .project-page__inner {
+    padding: 1.5rem 1.25rem 5rem;
+  }
+}

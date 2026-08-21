@@ -1,25 +1,40 @@
-import { AboutSection } from './components/About'
-import { ContactSection } from './components/Contact'
-import { Hero } from './components/Hero'
-import { ExperienceSection } from './components/Experience'
+import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom'
+import { useEffect } from 'react'
 import { SiteHeader } from './components/SiteHeader'
-import { WorkSection } from './components/Work'
+import { HomePage } from './pages/HomePage'
+
+function ScrollManager() {
+  const location = useLocation()
+
+  useEffect(() => {
+    if (location.hash) {
+      const id = location.hash.slice(1)
+      // Wait a tick so the home page is mounted before scrolling.
+      requestAnimationFrame(() => {
+        document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+      })
+      return
+    }
+
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
+  }, [location.pathname, location.hash])
+
+  return null
+}
 
 function App() {
   return (
-    <>
+    <BrowserRouter>
       <a href="#main-content" className="skip-link">
         Skip to main content
       </a>
       <SiteHeader />
-      <main id="main-content">
-        <Hero />
-        <AboutSection />
-        <WorkSection />
-        <ExperienceSection />
-        <ContactSection />
-      </main>
-    </>
+      <ScrollManager />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 

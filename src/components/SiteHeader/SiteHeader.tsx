@@ -1,14 +1,20 @@
+import { Link, useLocation } from 'react-router-dom'
 import { motion, useScroll, useSpring } from 'motion/react'
 import { SITE_NAME, SITE_ROLE } from '../../data/site'
 import './SiteHeader.css'
 
+const HOME_LINKS = [
+  { href: '/#about', label: 'About' },
+  { href: '/#work', label: 'Work' },
+  { href: '/#experience', label: 'Experience' },
+  { href: '/#contact', label: 'Contact' },
+] as const
+
 export function SiteHeader() {
+  const location = useLocation()
+  const isHome = location.pathname === '/'
   const { scrollYProgress } = useScroll()
   const scaleX = useSpring(scrollYProgress, { stiffness: 120, damping: 28 })
-
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  }
 
   return (
     <header className="site-header">
@@ -19,38 +25,27 @@ export function SiteHeader() {
       />
 
       <div className="site-header__inner">
-        <button
-          type="button"
+        <Link
+          to="/"
           className="site-header__brand"
-          onClick={scrollToTop}
-          aria-label={`${SITE_NAME}, scroll to top`}
+          aria-label={`${SITE_NAME}, go to home`}
         >
           <span className="site-header__name">{SITE_NAME}</span>
           <span className="site-header__role">{SITE_ROLE}</span>
-        </button>
+        </Link>
 
         <nav className="site-header__nav" aria-label="Primary">
           <ul className="site-header__nav-list">
-            <li>
-              <a className="site-header__nav-link" href="#about">
-                About
-              </a>
-            </li>
-            <li>
-              <a className="site-header__nav-link" href="#work">
-                Work
-              </a>
-            </li>
-            <li>
-              <a className="site-header__nav-link" href="#experience">
-                Experience
-              </a>
-            </li>
-            <li>
-              <a className="site-header__nav-link" href="#contact">
-                Contact
-              </a>
-            </li>
+            {HOME_LINKS.map((link) => (
+              <li key={link.href}>
+                <Link
+                  className="site-header__nav-link"
+                  to={isHome ? link.href.slice(1) : link.href}
+                >
+                  {link.label}
+                </Link>
+              </li>
+            ))}
           </ul>
         </nav>
       </div>
