@@ -2,6 +2,7 @@ import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-route
 import { useEffect } from 'react'
 import { SiteHeader } from './components/SiteHeader'
 import { HomePage } from './pages/HomePage'
+import { YouTubeClonePage } from './pages/YouTubeClonePage'
 
 function ScrollManager() {
   const location = useLocation()
@@ -32,6 +33,7 @@ function App() {
       <ScrollManager />
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/work/youtube-clone" element={<YouTubeClonePage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>

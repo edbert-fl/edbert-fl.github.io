@@ -1,0 +1,314 @@
+.ytc-schematic {
+  margin: 0 0 2.5rem;
+  border: 1px solid var(--project-border);
+  background: rgba(0, 0, 0, 0.45);
+  overflow: hidden;
+}
+
+.ytc-schematic__steps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem 1.25rem;
+  margin: 0;
+  padding: 0.9rem 1.1rem;
+  list-style: none;
+  border-bottom: 1px solid var(--project-border);
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--project-muted);
+}
+
+.ytc-schematic__steps span {
+  color: var(--project-accent);
+  margin-right: 0.35rem;
+}
+
+.ytc-schematic__canvas {
+  position: relative;
+}
+
+.ytc-schematic__lane {
+  position: absolute;
+  left: 0.75rem;
+  z-index: 0;
+  pointer-events: none;
+  font-family: var(--mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(113, 113, 122, 0.7);
+}
+
+.ytc-schematic__lane span {
+  display: inline-block;
+  padding: 0.2rem 0.45rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(5, 5, 5, 0.55);
+}
+
+.ytc-schematic__lane--control {
+  top: 0.65rem;
+}
+
+.ytc-schematic__lane--media {
+  bottom: 1.1rem;
+  color: rgba(34, 211, 238, 0.55);
+}
+
+.ytc-schematic__lane--media span {
+  border-color: rgba(34, 211, 238, 0.2);
+}
+
+.ytc-schematic__svg {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: auto;
+  min-height: 300px;
+}
+
+.ytc-schematic:not(.ytc-schematic--entered):not(.ytc-schematic--static) .ytc-schematic__wires,
+.ytc-schematic:not(.ytc-schematic--entered):not(.ytc-schematic--static) .ytc-schematic__badges,
+.ytc-schematic:not(.ytc-schematic--entered):not(.ytc-schematic--static) .ytc-schematic__block,
+.ytc-schematic:not(.ytc-schematic--entered):not(.ytc-schematic--static) .ytc-schematic__labels,
+.ytc-schematic:not(.ytc-schematic--entered):not(.ytc-schematic--static) .ytc-schematic__packets {
+  opacity: 0;
+}
+
+.ytc-schematic--entered:not(.ytc-schematic--static) .ytc-schematic__wires {
+  animation: ytc-schematic-fade-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.28s both;
+}
+
+.ytc-schematic--entered:not(.ytc-schematic--static) .ytc-schematic__badges {
+  animation: ytc-schematic-fade-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.42s both;
+}
+
+.ytc-schematic--entered:not(.ytc-schematic--static) .ytc-schematic__block {
+  animation: ytc-schematic-fade-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) var(--ytc-enter-delay, 0s) both;
+}
+
+.ytc-schematic--entered:not(.ytc-schematic--static) .ytc-schematic__labels {
+  animation: ytc-schematic-fade-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) 0.5s both;
+}
+
+.ytc-schematic--entered:not(.ytc-schematic--static) .ytc-schematic__packets {
+  animation: ytc-schematic-fade-in 0.4s cubic-bezier(0.22, 1, 0.36, 1) 0.85s both;
+}
+
+@keyframes ytc-schematic-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.ytc-schematic__node {
+  fill: rgba(5, 5, 5, 0.9);
+  stroke: rgba(255, 255, 255, 0.18);
+  stroke-width: 1.25;
+}
+
+.ytc-schematic__node--client {
+  stroke: rgba(34, 211, 238, 0.55);
+}
+
+.ytc-schematic__node--api {
+  stroke: #22d3ee;
+  stroke-width: 1.5;
+  fill: rgba(34, 211, 238, 0.06);
+}
+
+.ytc-schematic__node--storage {
+  stroke: rgba(34, 211, 238, 0.45);
+}
+
+.ytc-schematic__node--worker {
+  stroke: rgba(248, 113, 113, 0.65);
+  fill: rgba(248, 113, 113, 0.06);
+}
+
+.ytc-schematic__node--queue {
+  stroke: rgba(34, 211, 238, 0.45);
+  fill: rgba(5, 5, 5, 0.78);
+  stroke-dasharray: 5 4;
+}
+
+.ytc-schematic__title {
+  fill: #f4f4f5;
+  font-family: var(--heading), system-ui, sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+.ytc-schematic__sub {
+  fill: #a1a1aa;
+  font-family: var(--mono), ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.02em;
+}
+
+.ytc-schematic__hint {
+  fill: #22d3ee;
+  font-family: var(--mono), ui-monospace, monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.ytc-schematic__edge {
+  fill: #71717a;
+  font-family: var(--mono), ui-monospace, monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.ytc-schematic__queue-dir {
+  fill: #22d3ee;
+  font-family: var(--mono), ui-monospace, monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.ytc-schematic__ticket {
+  fill: rgba(255, 255, 255, 0.03);
+  stroke: rgba(255, 255, 255, 0.2);
+  stroke-width: 1;
+}
+
+.ytc-schematic__ticket--hot {
+  fill: rgba(248, 113, 113, 0.1);
+  stroke: #f87171;
+}
+
+.ytc-schematic__ticket-text {
+  fill: #d4d4d8;
+  font-family: var(--mono), ui-monospace, monospace;
+  font-size: 11px;
+}
+
+.ytc-schematic__ticket-text--hot {
+  fill: #fecaca;
+}
+
+.ytc-schematic__ticket-role {
+  fill: #71717a;
+  font-family: var(--mono), ui-monospace, monospace;
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.ytc-schematic__ticket-role--hot {
+  fill: #f87171;
+}
+
+.ytc-schematic__chevron {
+  fill: rgba(34, 211, 238, 0.45);
+}
+
+.ytc-schematic__badge {
+  fill: #050505;
+  stroke: #22d3ee;
+  stroke-width: 1.25;
+}
+
+.ytc-schematic__badge--accent {
+  stroke: #67e8f9;
+}
+
+.ytc-schematic__badge--hot {
+  stroke: #f87171;
+}
+
+.ytc-schematic__badge-text {
+  fill: #f4f4f5;
+  font-family: var(--mono), ui-monospace, monospace;
+  font-size: 9px;
+  letter-spacing: 0.04em;
+}
+
+.ytc-schematic__packets circle {
+  filter: drop-shadow(0 0 6px rgba(34, 211, 238, 0.9));
+}
+
+.ytc-schematic__tracer {
+  filter: drop-shadow(0 0 8px rgba(103, 232, 249, 1));
+}
+
+.ytc-schematic__caption {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 1.75rem;
+  margin: 0;
+  padding: 0.85rem 1.1rem;
+  border-top: 1px solid var(--project-border);
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--project-muted);
+}
+
+.ytc-schematic__caption span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.ytc-schematic__swatch {
+  display: inline-block;
+  width: 1.4rem;
+  height: 0;
+  border-top: 1.5px solid var(--project-accent);
+}
+
+.ytc-schematic__swatch--dash {
+  border-top-style: dashed;
+  opacity: 0.7;
+}
+
+.ytc-schematic__swatch--hot {
+  border-top-color: #f87171;
+}
+
+@media (max-width: 720px) {
+  .ytc-schematic__svg {
+    min-height: 240px;
+  }
+
+  .ytc-schematic__steps {
+    gap: 0.45rem 1rem;
+  }
+
+  .ytc-schematic__lane {
+    display: none;
+  }
+
+  .ytc-schematic__caption {
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ytc-schematic__packets {
+    display: none;
+  }
+
+  .ytc-schematic--entered:not(.ytc-schematic--static) .ytc-schematic__wires,
+  .ytc-schematic--entered:not(.ytc-schematic--static) .ytc-schematic__badges,
+  .ytc-schematic--entered:not(.ytc-schematic--static) .ytc-schematic__block,
+  .ytc-schematic--entered:not(.ytc-schematic--static) .ytc-schematic__labels,
+  .ytc-schematic--entered:not(.ytc-schematic--static) .ytc-schematic__packets {
+    animation: none;
+    opacity: 1;
+  }
+}
