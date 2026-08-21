@@ -3,26 +3,28 @@ import { useInView, useReducedMotion } from 'motion/react'
 import './YouTubeScaleTopology.css'
 
 const API_REPLICAS = [
-  { id: 'api-1', x: 180, y: 168 },
-  { id: 'api-2', x: 400, y: 168 },
-  { id: 'api-3', x: 620, y: 168 },
+  { id: 'api-1', x: 156 },
+  { id: 'api-2', x: 388 },
+  { id: 'api-3', x: 620 },
 ] as const
 
 const WORKERS = [
-  { id: 'w-1', x: 180, y: 372 },
-  { id: 'w-2', x: 400, y: 372 },
-  { id: 'w-3', x: 620, y: 372 },
+  { id: 'w-1', x: 156 },
+  { id: 'w-2', x: 388 },
+  { id: 'w-3', x: 620 },
 ] as const
 
-const BOX_W = 120
-const BOX_H = 56
+const BOX_W = 144
+const BOX_H = 78
 const ALB_CX = 460
-const ALB_Y = 72
-const SQS_Y = 278
+const ALB_Y = 88
+const API_Y = 220
+const SQS_Y = 380
+const WORKER_Y = 500
 
 /**
- * Runtime topology for future horizontal scale:
- * clients → ALB fan-out to API×N; workers×M independently pull from SQS.
+ * Runtime topology: clients → ALB → Kubernetes API pods × N;
+ * worker pods × M pull from SQS (not behind ALB).
  */
 export function YouTubeScaleTopology() {
   const reduceMotion = useReducedMotion()
@@ -41,24 +43,24 @@ export function YouTubeScaleTopology() {
       ]
         .filter(Boolean)
         .join(' ')}
-      aria-label="Horizontal scale topology. Clients hit one Application Load Balancer. The ALB fans requests out across multiple health-checked API replicas. Any API replica can enqueue a transcode job to SQS. Multiple workers pull jobs from SQS independently and are not behind the ALB."
+      aria-label="Horizontal scale on Kubernetes. Clients hit one Application Load Balancer. The ALB fans requests across N health-checked API pods from a Docker image. Any API pod can enqueue a transcode job to SQS. M worker pods, from a Docker image with FFmpeg, pull jobs from SQS and are not behind the ALB. Scale each Deployment by raising replica count."
     >
       <ul className="ytc-scale-topo__legend" aria-hidden="true">
         <li>
-          <i className="ytc-scale-topo__swatch ytc-scale-topo__swatch--http" /> ALB fan-out
+          <i className="ytc-scale-topo__swatch ytc-scale-topo__swatch--http" /> ALB → API pods
         </li>
         <li>
           <i className="ytc-scale-topo__swatch ytc-scale-topo__swatch--queue" /> Enqueue
         </li>
         <li>
-          <i className="ytc-scale-topo__swatch ytc-scale-topo__swatch--note" /> Worker pull
+          <i className="ytc-scale-topo__swatch ytc-scale-topo__swatch--note" /> Worker pods pull
         </li>
       </ul>
 
       <div className="ytc-scale-topo__canvas">
         <svg
           className="ytc-scale-topo__svg"
-          viewBox="0 0 920 460"
+          viewBox="0 0 920 620"
           role="presentation"
           focusable="false"
         >
@@ -87,39 +89,63 @@ export function YouTubeScaleTopology() {
             </marker>
           </defs>
 
-          {/* Lane labels */}
-          <text x="36" y="56" className="ytc-scale-topo__lane">
+          <text x="28" y="56" className="ytc-scale-topo__lane">
             Edge
           </text>
-          <text x="36" y="198" className="ytc-scale-topo__lane">
-            API × N
+          <text x="28" y="258" className="ytc-scale-topo__lane">
+            K8s · API
           </text>
-          <text x="36" y="308" className="ytc-scale-topo__lane">
+          <text x="28" y="410" className="ytc-scale-topo__lane">
             Queue
           </text>
-          <text x="36" y="402" className="ytc-scale-topo__lane ytc-scale-topo__lane--hot">
-            Workers × M
+          <text x="28" y="538" className="ytc-scale-topo__lane ytc-scale-topo__lane--hot">
+            K8s · Worker
+          </text>
+
+          <rect
+            x="132"
+            y={API_Y - 36}
+            width="656"
+            height={BOX_H + 58}
+            rx="3"
+            className="ytc-scale-topo__cluster"
+          />
+          <text x="148" y={API_Y - 14} className="ytc-scale-topo__cluster-label">
+            Kubernetes Deployment · image: api · replicas: N
+          </text>
+
+          <rect
+            x="132"
+            y={WORKER_Y - 36}
+            width="656"
+            height={BOX_H + 58}
+            rx="3"
+            className="ytc-scale-topo__cluster ytc-scale-topo__cluster--worker"
+          />
+          <text
+            x="148"
+            y={WORKER_Y - 14}
+            className="ytc-scale-topo__cluster-label ytc-scale-topo__cluster-label--hot"
+          >
+            Kubernetes Deployment · image: worker · FFmpeg · replicas: M
           </text>
 
           <g className="ytc-scale-topo__wires" fill="none" strokeWidth="1.4">
-            {/* Clients → ALB */}
             <path
               id="ytc-scale-path-client"
-              d={`M ${ALB_CX} 48 V ${ALB_Y}`}
+              d={`M ${ALB_CX} 52 V ${ALB_Y}`}
               stroke="#22d3ee"
               strokeOpacity="0.55"
               markerEnd="url(#ytc-scale-arrow)"
             />
 
-            {/* ALB fan-out to each API replica */}
             {API_REPLICAS.map((api) => {
               const targetX = api.x + BOX_W / 2
-              const targetY = api.y
               return (
                 <path
                   key={`alb-${api.id}`}
                   id={`ytc-scale-path-${api.id}`}
-                  d={`M ${ALB_CX} ${ALB_Y + 52} C ${ALB_CX} ${ALB_Y + 96}, ${targetX} ${targetY - 36}, ${targetX} ${targetY}`}
+                  d={`M ${ALB_CX} ${ALB_Y + 56} C ${ALB_CX} ${ALB_Y + 110}, ${targetX} ${API_Y - 40}, ${targetX} ${API_Y}`}
                   stroke="#22d3ee"
                   strokeOpacity="0.65"
                   markerEnd="url(#ytc-scale-arrow)"
@@ -127,17 +153,13 @@ export function YouTubeScaleTopology() {
               )
             })}
 
-            {/* Each API → SQS enqueue */}
             {API_REPLICAS.map((api) => {
               const fromX = api.x + BOX_W / 2
-              const fromY = api.y + BOX_H
-              const toX = ALB_CX
-              const toY = SQS_Y
               return (
                 <path
                   key={`enq-${api.id}`}
                   id={`ytc-scale-enq-${api.id}`}
-                  d={`M ${fromX} ${fromY} C ${fromX} ${fromY + 34}, ${toX} ${toY - 34}, ${toX} ${toY}`}
+                  d={`M ${fromX} ${API_Y + BOX_H} C ${fromX} ${API_Y + BOX_H + 42}, ${ALB_CX} ${SQS_Y - 42}, ${ALB_CX} ${SQS_Y}`}
                   stroke="#22d3ee"
                   strokeOpacity="0.4"
                   strokeDasharray="6 5"
@@ -146,15 +168,13 @@ export function YouTubeScaleTopology() {
               )
             })}
 
-            {/* SQS fan-out pull to each worker */}
             {WORKERS.map((worker) => {
               const toX = worker.x + BOX_W / 2
-              const toY = worker.y
               return (
                 <path
                   key={`pull-${worker.id}`}
                   id={`ytc-scale-pull-${worker.id}`}
-                  d={`M ${ALB_CX} ${SQS_Y + 52} C ${ALB_CX} ${SQS_Y + 88}, ${toX} ${toY - 28}, ${toX} ${toY}`}
+                  d={`M ${ALB_CX} ${SQS_Y + 56} C ${ALB_CX} ${SQS_Y + 100}, ${toX} ${WORKER_Y - 36}, ${toX} ${WORKER_Y}`}
                   stroke="#f87171"
                   strokeOpacity="0.7"
                   strokeDasharray="5 4"
@@ -165,49 +185,78 @@ export function YouTubeScaleTopology() {
           </g>
 
           <g className="ytc-scale-topo__blocks">
-            {/* Clients */}
             <rect
               x={ALB_CX - 70}
-              y={8}
+              y={12}
               width={140}
               height={40}
               rx={2}
               className="ytc-scale-topo__box"
             />
-            <text x={ALB_CX} y={33} textAnchor="middle" className="ytc-scale-topo__label">
+            <text x={ALB_CX} y={37} textAnchor="middle" className="ytc-scale-topo__label">
               Clients
             </text>
 
-            {/* ALB */}
             <rect
               x={ALB_CX - 130}
               y={ALB_Y}
               width={260}
-              height={52}
+              height={56}
               rx={2}
               className="ytc-scale-topo__box ytc-scale-topo__box--accent"
             />
-            <text x={ALB_CX} y={ALB_Y + 22} textAnchor="middle" className="ytc-scale-topo__label">
+            <text x={ALB_CX} y={ALB_Y + 24} textAnchor="middle" className="ytc-scale-topo__label">
               Application Load Balancer
             </text>
-            <text x={ALB_CX} y={ALB_Y + 40} textAnchor="middle" className="ytc-scale-topo__sub">
-              HTTPS · health checks · fan-out
+            <text x={ALB_CX} y={ALB_Y + 42} textAnchor="middle" className="ytc-scale-topo__sub">
+              HTTPS · health checks · fan-out to pods
             </text>
 
-            {/* API replicas as separate boxes */}
             {API_REPLICAS.map((api) => (
               <g key={api.id}>
                 <rect
                   x={api.x}
-                  y={api.y}
+                  y={API_Y}
                   width={BOX_W}
                   height={BOX_H}
                   rx={2}
-                  className="ytc-scale-topo__box"
+                  className="ytc-scale-topo__box ytc-scale-topo__box--container"
+                />
+                <rect
+                  x={api.x + 8}
+                  y={API_Y + 8}
+                  width={40}
+                  height={16}
+                  rx={1}
+                  className="ytc-scale-topo__badge"
                 />
                 <text
+                  x={api.x + 28}
+                  y={API_Y + 19.5}
+                  textAnchor="middle"
+                  className="ytc-scale-topo__badge-text"
+                >
+                  pod
+                </text>
+                <rect
+                  x={api.x + 52}
+                  y={API_Y + 8}
+                  width={52}
+                  height={16}
+                  rx={1}
+                  className="ytc-scale-topo__badge"
+                />
+                <text
+                  x={api.x + 78}
+                  y={API_Y + 19.5}
+                  textAnchor="middle"
+                  className="ytc-scale-topo__badge-text"
+                >
+                  docker
+                </text>
+                <text
                   x={api.x + BOX_W / 2}
-                  y={api.y + 24}
+                  y={API_Y + 46}
                   textAnchor="middle"
                   className="ytc-scale-topo__label"
                 >
@@ -215,7 +264,7 @@ export function YouTubeScaleTopology() {
                 </text>
                 <text
                   x={api.x + BOX_W / 2}
-                  y={api.y + 42}
+                  y={API_Y + 64}
                   textAnchor="middle"
                   className="ytc-scale-topo__sub"
                 >
@@ -224,36 +273,66 @@ export function YouTubeScaleTopology() {
               </g>
             ))}
 
-            {/* SQS */}
             <rect
               x={ALB_CX - 130}
               y={SQS_Y}
               width={260}
-              height={52}
+              height={56}
               rx={2}
               className="ytc-scale-topo__box ytc-scale-topo__box--queue"
             />
-            <text x={ALB_CX} y={SQS_Y + 22} textAnchor="middle" className="ytc-scale-topo__label">
+            <text x={ALB_CX} y={SQS_Y + 24} textAnchor="middle" className="ytc-scale-topo__label">
               SQS
             </text>
-            <text x={ALB_CX} y={SQS_Y + 40} textAnchor="middle" className="ytc-scale-topo__sub">
+            <text x={ALB_CX} y={SQS_Y + 42} textAnchor="middle" className="ytc-scale-topo__sub">
               Transcode jobs · buffer spikes
             </text>
 
-            {/* Workers as separate boxes */}
             {WORKERS.map((worker) => (
               <g key={worker.id}>
                 <rect
                   x={worker.x}
-                  y={worker.y}
+                  y={WORKER_Y}
                   width={BOX_W}
                   height={BOX_H}
                   rx={2}
                   className="ytc-scale-topo__box ytc-scale-topo__box--worker"
                 />
+                <rect
+                  x={worker.x + 8}
+                  y={WORKER_Y + 8}
+                  width={40}
+                  height={16}
+                  rx={1}
+                  className="ytc-scale-topo__badge ytc-scale-topo__badge--hot"
+                />
+                <text
+                  x={worker.x + 28}
+                  y={WORKER_Y + 19.5}
+                  textAnchor="middle"
+                  className="ytc-scale-topo__badge-text ytc-scale-topo__badge-text--hot"
+                >
+                  pod
+                </text>
+                <rect
+                  x={worker.x + 52}
+                  y={WORKER_Y + 8}
+                  width={52}
+                  height={16}
+                  rx={1}
+                  className="ytc-scale-topo__badge ytc-scale-topo__badge--hot"
+                />
+                <text
+                  x={worker.x + 78}
+                  y={WORKER_Y + 19.5}
+                  textAnchor="middle"
+                  className="ytc-scale-topo__badge-text ytc-scale-topo__badge-text--hot"
+                >
+                  docker
+                </text>
                 <text
                   x={worker.x + BOX_W / 2}
-                  y={worker.y + 24}
+                  y={WORKER_Y + 46}
                   textAnchor="middle"
                   className="ytc-scale-topo__label"
                 >
@@ -261,22 +340,17 @@ export function YouTubeScaleTopology() {
                 </text>
                 <text
                   x={worker.x + BOX_W / 2}
-                  y={worker.y + 42}
+                  y={WORKER_Y + 64}
                   textAnchor="middle"
                   className="ytc-scale-topo__sub"
                 >
-                  Pull · FFmpeg
+                  pull · FFmpeg
                 </text>
               </g>
             ))}
 
-            <text
-              x={ALB_CX}
-              y={448}
-              textAnchor="middle"
-              className="ytc-scale-topo__footnote"
-            >
-              Workers are not behind the ALB
+            <text x={ALB_CX} y={604} textAnchor="middle" className="ytc-scale-topo__footnote">
+              Compose images on Kubernetes · workers not behind the ALB
             </text>
           </g>
 

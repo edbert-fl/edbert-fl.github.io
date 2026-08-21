@@ -49,7 +49,7 @@
   display: block;
   width: 100%;
   height: auto;
-  min-height: 280px;
+  min-height: 420px;
 }
 
 .ytc-scale-topo__lane {
@@ -81,6 +81,57 @@
 
 .ytc-scale-topo__box--worker {
   stroke: rgba(248, 113, 113, 0.45);
+}
+
+.ytc-scale-topo__box--container {
+  stroke: rgba(34, 211, 238, 0.4);
+}
+
+.ytc-scale-topo__cluster {
+  fill: rgba(34, 211, 238, 0.03);
+  stroke: rgba(34, 211, 238, 0.18);
+  stroke-width: 1;
+  stroke-dasharray: 5 4;
+}
+
+.ytc-scale-topo__cluster--worker {
+  fill: rgba(248, 113, 113, 0.03);
+  stroke: rgba(248, 113, 113, 0.22);
+}
+
+.ytc-scale-topo__cluster-label {
+  fill: rgba(34, 211, 238, 0.75);
+  font-family: var(--mono), ui-monospace, monospace;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.ytc-scale-topo__cluster-label--hot {
+  fill: rgba(248, 113, 113, 0.8);
+}
+
+.ytc-scale-topo__badge {
+  fill: rgba(34, 211, 238, 0.1);
+  stroke: rgba(34, 211, 238, 0.4);
+  stroke-width: 1;
+}
+
+.ytc-scale-topo__badge--hot {
+  fill: rgba(248, 113, 113, 0.1);
+  stroke: rgba(248, 113, 113, 0.4);
+}
+
+.ytc-scale-topo__badge-text {
+  fill: #22d3ee;
+  font-family: var(--mono), ui-monospace, monospace;
+  font-size: 8px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.ytc-scale-topo__badge-text--hot {
+  fill: #f87171;
 }
 
 .ytc-scale-topo__label {
@@ -160,7 +211,7 @@
 
 @media (max-width: 720px) {
   .ytc-scale-topo__svg {
-    min-height: 240px;
+    min-height: 360px;
   }
 
   .ytc-scale-topo__lane {

@@ -17,8 +17,8 @@ const SCALE_FAQ: ScaleFaqItem[] = [
     id: 'api-workers',
     question: 'How would the API and workers scale?',
     paragraphs: [
-      'Scale the API horizontally with N container replicas behind an Application Load Balancer. ALB gives a single HTTPS entrypoint, health-checked routing, and zero client awareness of which replica handled the request. The API stays stateless (JWT), so any replica can serve any call.',
-      'Transcode workers scale separately as SQS consumers, not behind ALB, because they pull jobs and run FFmpeg rather than serving user HTTP.',
+      'On Kubernetes, scale the API as a Deployment of N pods (same Docker image) behind an Application Load Balancer. ALB is the single HTTPS entrypoint: health-checked routing across pods, and clients never care which replica answered. Because the API is stateless (JWT), any pod can serve any call.',
+      'Workers are a second Deployment and Docker image (FFmpeg included). Scale them to M pods as SQS consumers by raising replica count, not by putting them behind the ALB. Local Docker Compose already runs both images; Kubernetes is the same unit of deploy with independent replica counts for API and workers.',
     ],
     visual: 'topology',
   },
