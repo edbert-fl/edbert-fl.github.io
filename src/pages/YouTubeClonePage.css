@@ -130,6 +130,57 @@
   scroll-margin-top: calc(var(--site-header-height, 3.25rem) + 0.75rem);
 }
 
+.ytc-toc {
+  display: grid;
+  gap: 0.85rem;
+  padding: 1.5rem 0 0.5rem;
+}
+
+.ytc-toc__label {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--project-muted);
+}
+
+.ytc-toc__list {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.55rem 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ytc-toc__link {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.55rem;
+  padding: 0.35rem 0;
+  color: var(--project-body);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.ytc-toc__link:hover,
+.ytc-toc__link:focus-visible {
+  color: var(--project-accent);
+}
+
+.ytc-toc__index {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  color: var(--project-accent);
+}
+
+.ytc-toc__text {
+  font-family: var(--sans-tech);
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
 .ytc-block__title {
   margin: 0 0 0.85rem;
   font-size: clamp(1.65rem, 3.5vw, 2.25rem);
@@ -367,16 +418,48 @@
   margin: 0;
   padding: 0;
   list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.75rem 1.5rem;
 }
 
 .ytc-points__list li {
-  padding: 1.15rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.55rem;
+  padding: 0;
+}
+
+.ytc-points__icon {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  margin-bottom: 0.15rem;
+  color: var(--project-accent);
+  border: 1px solid rgba(34, 211, 238, 0.28);
+  background: rgba(34, 211, 238, 0.05);
+}
+
+.ytc-points__icon-svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.ytc-points__title {
+  font-family: var(--sans-tech);
   font-size: 1.05rem;
-  line-height: 1.5;
-  color: #d4d4d8;
+  font-weight: 500;
+  line-height: 1.25;
+  color: var(--project-text);
+}
+
+.ytc-points__body {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  line-height: 1.55;
+  color: var(--project-muted);
 }
 
 .ytc-footer {
@@ -414,6 +497,14 @@
     grid-template-columns: 1fr;
     gap: 0.35rem;
   }
+
+  .ytc-points__list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .ytc-toc__list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 720px) {
@@ -439,5 +530,9 @@
 
   .ytc-block {
     padding: 3rem 0;
+  }
+
+  .ytc-points__list {
+    grid-template-columns: 1fr;
   }
 }

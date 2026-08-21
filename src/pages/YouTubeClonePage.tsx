@@ -135,13 +135,114 @@ const STACK = [
 ]
 
 const TALKING_POINTS = [
-  'End-to-end product thinking, not just a CRUD demo',
-  'Cloud-native patterns: S3 direct upload, SQS async jobs, Postgres metadata, JWT auth',
-  'Separation of concerns with Clean Architecture',
-  'Scale from day one: API, workers, and storage can grow on separate axes',
-  'Correctness under edge cases (abandon upload, retries, visibility, ownership)',
-  'Automated testing discipline across unit, integration, and browser E2E',
-]
+  {
+    id: 'product',
+    title: 'End-to-end product',
+    body: 'Real platform flows, not just a CRUD demo.',
+  },
+  {
+    id: 'cloud',
+    title: 'Cloud-native patterns',
+    body: 'S3 direct upload, SQS jobs, Postgres metadata, JWT auth.',
+  },
+  {
+    id: 'architecture',
+    title: 'Clean Architecture',
+    body: 'Domain, application, and infrastructure stay separated.',
+  },
+  {
+    id: 'scale',
+    title: 'Scale from day one',
+    body: 'Designed so API, workers, and storage can grow on separate axes.',
+  },
+  {
+    id: 'correctness',
+    title: 'Edge-case correctness',
+    body: 'Abandon upload, retries, visibility, and ownership covered.',
+  },
+  {
+    id: 'testing',
+    title: 'Test discipline',
+    body: 'Unit, integration, and Playwright E2E across the stack.',
+  },
+] as const
+
+type TalkingPointId = (typeof TALKING_POINTS)[number]['id']
+
+function TalkingPointIcon({ id }: { id: TalkingPointId }) {
+  const common = {
+    className: 'ytc-points__icon-svg',
+    viewBox: '0 0 24 24',
+    fill: 'none',
+    stroke: 'currentColor',
+    strokeWidth: 1.25,
+    strokeLinecap: 'round' as const,
+    strokeLinejoin: 'round' as const,
+    'aria-hidden': true as const,
+  }
+
+  switch (id) {
+    case 'product':
+      return (
+        <svg {...common}>
+          <rect x="3.5" y="4.5" width="7" height="7" rx="1" />
+          <rect x="13.5" y="4.5" width="7" height="7" rx="1" />
+          <rect x="3.5" y="12.5" width="7" height="7" rx="1" />
+          <path d="M17 12.5v7M13.5 16h7" />
+        </svg>
+      )
+    case 'cloud':
+      return (
+        <svg {...common}>
+          <path d="M7.5 17.5h9.2a3.3 3.3 0 0 0 .4-6.55 4.5 4.5 0 0 0-8.55-1.4A3.2 3.2 0 0 0 7.5 17.5Z" />
+          <path d="M9 12.5h2M13 12.5h2" />
+        </svg>
+      )
+    case 'architecture':
+      return (
+        <svg {...common}>
+          <rect x="4" y="4" width="16" height="4" rx="1" />
+          <rect x="4" y="10" width="16" height="4" rx="1" />
+          <rect x="4" y="16" width="16" height="4" rx="1" />
+        </svg>
+      )
+    case 'scale':
+      return (
+        <svg {...common}>
+          <circle cx="12" cy="5.5" r="2" />
+          <circle cx="5.5" cy="17.5" r="2" />
+          <circle cx="12" cy="17.5" r="2" />
+          <circle cx="18.5" cy="17.5" r="2" />
+          <path d="M12 7.5v4M12 11.5 5.5 15.5M12 11.5l6.5 4" />
+        </svg>
+      )
+    case 'correctness':
+      return (
+        <svg {...common}>
+          <path d="M12 3.5 19 6.5v5.2c0 4.1-2.8 7.4-7 8.8-4.2-1.4-7-4.7-7-8.8V6.5L12 3.5Z" />
+          <path d="m9.2 12.2 1.9 1.9 3.8-3.9" />
+        </svg>
+      )
+    case 'testing':
+      return (
+        <svg {...common}>
+          <rect x="4.5" y="3.5" width="15" height="17" rx="1.5" />
+          <path d="m8 9 1.6 1.6L12.8 7.5M8 14h8M8 17h5" />
+        </svg>
+      )
+  }
+}
+
+const TOC = [
+  { href: '#intent', index: '01', label: 'Intent' },
+  { href: '#architecture', index: '02', label: 'Architecture' },
+  { href: '#product', index: '03', label: 'Product' },
+  { href: '#security', index: '04', label: 'Security' },
+  { href: '#stack', index: '05', label: 'Stack' },
+  { href: '#quality', index: '06', label: 'Quality' },
+  { href: '#scale', index: '07', label: 'Scale' },
+  { href: '#takeaways', index: '08', label: 'Takeaways' },
+] as const
 
 export function YouTubeClonePage() {
   const reduceMotion = useReducedMotion()
@@ -203,7 +304,22 @@ export function YouTubeClonePage() {
         )}
       </header>
 
+      <nav className="ytc-toc" aria-label="On this page">
+        <span className="ytc-toc__label">Contents</span>
+        <ol className="ytc-toc__list">
+          {TOC.map((item) => (
+            <li key={item.href}>
+              <Link to={item.href} className="ytc-toc__link">
+                <span className="ytc-toc__index">{item.index}</span>
+                <span className="ytc-toc__text">{item.label}</span>
+              </Link>
+            </li>
+          ))}
+        </ol>
+      </nav>
+
       <motion.section
+        id="intent"
         className="ytc-block ytc-goals"
         aria-labelledby="ytc-goals-title"
         initial={reduceMotion ? false : 'hidden'}
@@ -231,6 +347,7 @@ export function YouTubeClonePage() {
       </motion.section>
 
       <motion.section
+        id="architecture"
         className="ytc-block ytc-arch"
         aria-labelledby="ytc-arch-title"
         initial={reduceMotion ? false : 'hidden'}
@@ -263,6 +380,7 @@ export function YouTubeClonePage() {
       </motion.section>
 
       <motion.section
+        id="product"
         className="ytc-block ytc-caps"
         aria-labelledby="ytc-caps-title"
         initial={reduceMotion ? false : 'hidden'}
@@ -283,6 +401,7 @@ export function YouTubeClonePage() {
       </motion.section>
 
       <motion.section
+        id="security"
         className="ytc-block ytc-vis"
         aria-labelledby="ytc-vis-title"
         initial={reduceMotion ? false : 'hidden'}
@@ -330,6 +449,7 @@ export function YouTubeClonePage() {
       </motion.section>
 
       <motion.section
+        id="stack"
         className="ytc-block ytc-stack"
         aria-labelledby="ytc-stack-title"
         initial={reduceMotion ? false : 'hidden'}
@@ -369,6 +489,7 @@ export function YouTubeClonePage() {
       </motion.section>
 
       <motion.section
+        id="quality"
         className="ytc-block ytc-test"
         aria-labelledby="ytc-test-title"
         initial={reduceMotion ? false : 'hidden'}
@@ -390,6 +511,7 @@ export function YouTubeClonePage() {
       </motion.section>
 
       <motion.section
+        id="scale"
         className="ytc-block ytc-scale"
         aria-labelledby="ytc-scale-title"
         initial={reduceMotion ? false : 'hidden'}
@@ -413,6 +535,7 @@ export function YouTubeClonePage() {
       </motion.section>
 
       <motion.section
+        id="takeaways"
         className="ytc-block ytc-points"
         aria-labelledby="ytc-points-title"
         initial={reduceMotion ? false : 'hidden'}
@@ -429,7 +552,13 @@ export function YouTubeClonePage() {
         </h2>
         <ul className="ytc-points__list">
           {TALKING_POINTS.map((item) => (
-            <li key={item}>{item}</li>
+            <li key={item.id}>
+              <span className="ytc-points__icon">
+                <TalkingPointIcon id={item.id} />
+              </span>
+              <span className="ytc-points__title">{item.title}</span>
+              <span className="ytc-points__body">{item.body}</span>
+            </li>
           ))}
         </ul>
       </motion.section>
