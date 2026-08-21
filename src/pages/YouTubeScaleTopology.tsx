@@ -23,8 +23,8 @@ const SQS_Y = 380
 const WORKER_Y = 500
 
 /**
- * Runtime topology: clients → ALB → Kubernetes API pods × N;
- * worker pods × M pull from SQS (not behind ALB).
+ * Runtime topology: clients → ALB → ECS/Fargate API tasks × N;
+ * worker tasks × M pull from SQS (not behind ALB).
  */
 export function YouTubeScaleTopology() {
   const reduceMotion = useReducedMotion()
@@ -43,17 +43,17 @@ export function YouTubeScaleTopology() {
       ]
         .filter(Boolean)
         .join(' ')}
-      aria-label="Horizontal scale on Kubernetes. Clients hit one Application Load Balancer. The ALB fans requests across N health-checked API pods from a Docker image. Any API pod can enqueue a transcode job to SQS. M worker pods, from a Docker image with FFmpeg, pull jobs from SQS and are not behind the ALB. Scale each Deployment by raising replica count."
+      aria-label="Horizontal scale on AWS ECS with Fargate. Clients hit one Application Load Balancer. The ALB fans requests across N health-checked API tasks from a Docker image. Any API task can enqueue a transcode job to SQS. M worker tasks, from a Docker image with FFmpeg, pull jobs from SQS and are not behind the ALB. Scale each ECS service by raising desired count."
     >
       <ul className="ytc-scale-topo__legend" aria-hidden="true">
         <li>
-          <i className="ytc-scale-topo__swatch ytc-scale-topo__swatch--http" /> ALB → API pods
+          <i className="ytc-scale-topo__swatch ytc-scale-topo__swatch--http" /> ALB → API tasks
         </li>
         <li>
           <i className="ytc-scale-topo__swatch ytc-scale-topo__swatch--queue" /> Enqueue
         </li>
         <li>
-          <i className="ytc-scale-topo__swatch ytc-scale-topo__swatch--note" /> Worker pods pull
+          <i className="ytc-scale-topo__swatch ytc-scale-topo__swatch--note" /> Worker tasks pull
         </li>
       </ul>
 
@@ -93,13 +93,13 @@ export function YouTubeScaleTopology() {
             Edge
           </text>
           <text x="28" y="258" className="ytc-scale-topo__lane">
-            K8s · API
+            ECS · API
           </text>
           <text x="28" y="410" className="ytc-scale-topo__lane">
             Queue
           </text>
           <text x="28" y="538" className="ytc-scale-topo__lane ytc-scale-topo__lane--hot">
-            K8s · Worker
+            ECS · Worker
           </text>
 
           <rect
@@ -111,7 +111,7 @@ export function YouTubeScaleTopology() {
             className="ytc-scale-topo__cluster"
           />
           <text x="148" y={API_Y - 14} className="ytc-scale-topo__cluster-label">
-            Kubernetes Deployment · image: api · replicas: N
+            ECS service (Fargate) · image: api · desired: N
           </text>
 
           <rect
@@ -127,7 +127,7 @@ export function YouTubeScaleTopology() {
             y={WORKER_Y - 14}
             className="ytc-scale-topo__cluster-label ytc-scale-topo__cluster-label--hot"
           >
-            Kubernetes Deployment · image: worker · FFmpeg · replicas: M
+            ECS service (Fargate) · image: worker · FFmpeg · desired: M
           </text>
 
           <g className="ytc-scale-topo__wires" fill="none" strokeWidth="1.4">
@@ -209,7 +209,7 @@ export function YouTubeScaleTopology() {
               Application Load Balancer
             </text>
             <text x={ALB_CX} y={ALB_Y + 42} textAnchor="middle" className="ytc-scale-topo__sub">
-              HTTPS · health checks · fan-out to pods
+              HTTPS · health checks · fan-out to tasks
             </text>
 
             {API_REPLICAS.map((api) => (
@@ -236,7 +236,7 @@ export function YouTubeScaleTopology() {
                   textAnchor="middle"
                   className="ytc-scale-topo__badge-text"
                 >
-                  pod
+                  task
                 </text>
                 <rect
                   x={api.x + 52}
@@ -312,7 +312,7 @@ export function YouTubeScaleTopology() {
                   textAnchor="middle"
                   className="ytc-scale-topo__badge-text ytc-scale-topo__badge-text--hot"
                 >
-                  pod
+                  task
                 </text>
                 <rect
                   x={worker.x + 52}
@@ -350,7 +350,7 @@ export function YouTubeScaleTopology() {
             ))}
 
             <text x={ALB_CX} y={604} textAnchor="middle" className="ytc-scale-topo__footnote">
-              Compose images on Kubernetes · workers not behind the ALB
+              Compose images on ECS/Fargate · workers not behind the ALB
             </text>
           </g>
 

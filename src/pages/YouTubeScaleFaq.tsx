@@ -17,8 +17,8 @@ const SCALE_FAQ: ScaleFaqItem[] = [
     id: 'api-workers',
     question: 'How would the API and workers scale?',
     paragraphs: [
-      'On Kubernetes, scale the API as a Deployment of N pods (same Docker image) behind an Application Load Balancer. ALB is the single HTTPS entrypoint: health-checked routing across pods, and clients never care which replica answered. Because the API is stateless (JWT), any pod can serve any call.',
-      'Workers are a second Deployment and Docker image (FFmpeg included). Scale them to M pods as SQS consumers by raising replica count, not by putting them behind the ALB. Local Docker Compose already runs both images; Kubernetes is the same unit of deploy with independent replica counts for API and workers.',
+      'On AWS ECS with Fargate, scale the API as a service of N tasks (same Docker image) behind an Application Load Balancer. ALB is the single HTTPS entrypoint: health-checked routing across tasks, and clients never care which replica answered. Because the API is stateless (JWT), any task can serve any call. Fargate means no EC2 nodes to babysit; you set CPU/memory and desired count.',
+      'Workers are a second ECS service and Docker image (FFmpeg included). Scale them to M tasks as SQS consumers by raising desired count (or autoscaling on queue depth), not by putting them behind the ALB. Local Docker Compose already runs both images; ECS/Fargate is the same unit of deploy with independent counts for API and workers.',
     ],
     visual: 'topology',
   },
@@ -26,8 +26,8 @@ const SCALE_FAQ: ScaleFaqItem[] = [
     id: 'containers',
     question: 'Why containers instead of a serverless-first API?',
     paragraphs: [
-      'A serverless-first API (API Gateway + Lambda) was rejected for this project. The system is a long-running .NET service plus CPU-heavy media workers. Containers preserve local Docker parity, fit EF Core and RDS access patterns, and keep one operational model.',
-      'Serverless would complicate the API without solving transcoding, which still requires containerized workers.',
+      'A serverless-first API (API Gateway + Lambda) was rejected for this project. The system is a long-running .NET service plus CPU-heavy media workers. Containers preserve local Docker parity, fit EF Core and RDS access patterns, and keep one operational model that maps cleanly to ECS on Fargate.',
+      'Serverless would complicate the API without solving transcoding, which still needs long-running containerized workers.',
     ],
   },
   {

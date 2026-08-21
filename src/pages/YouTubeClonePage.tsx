@@ -153,7 +153,7 @@ const TALKING_POINTS = [
   {
     id: 'scale',
     title: 'Scale from day one',
-    body: 'Designed so API, workers, and storage can grow on separate axes.',
+    body: 'Designed so API and workers can grow as separate ECS/Fargate services.',
   },
   {
     id: 'correctness',
