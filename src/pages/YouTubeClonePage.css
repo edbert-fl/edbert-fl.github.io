@@ -1,11 +1,22 @@
 .ytc-index {
   display: block;
+  width: fit-content;
   margin-bottom: 1.1rem;
   font-family: var(--mono);
   font-size: 0.68rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--project-accent);
+  scroll-margin-top: calc(var(--site-header-height, 3.25rem) + 0.75rem);
+}
+
+.ytc-index:focus {
+  outline: none;
+}
+
+.ytc-index:focus-visible {
+  outline: 2px solid var(--project-accent);
+  outline-offset: 4px;
 }
 
 .ytc-hero {
@@ -16,7 +27,6 @@
   padding: 1.5rem 0 3rem;
   margin: 0 -2rem 1rem;
   overflow: hidden;
-  border-bottom: 1px solid var(--project-border);
 }
 
 .ytc-hero__copy {
@@ -117,7 +127,7 @@
 
 .ytc-block {
   padding: 4rem 0;
-  border-bottom: 1px solid var(--project-border);
+  scroll-margin-top: calc(var(--site-header-height, 3.25rem) + 0.75rem);
 }
 
 .ytc-block__title {
@@ -364,14 +374,9 @@
 
 .ytc-points__list li {
   padding: 1.15rem 0;
-  border-top: 1px solid var(--project-border);
   font-size: 1.05rem;
   line-height: 1.5;
   color: #d4d4d8;
-}
-
-.ytc-points__list li:last-child {
-  border-bottom: 1px solid var(--project-border);
 }
 
 .ytc-footer {

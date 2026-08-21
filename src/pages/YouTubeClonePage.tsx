@@ -1,11 +1,16 @@
-import { lazy, Suspense } from 'react'
+import { lazy, Suspense, useEffect, type FocusEvent } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, useReducedMotion } from 'motion/react'
 import { GlitchText } from '../components/Hero/GlitchText'
 import { ProjectPageShell } from '../components/Project/ProjectPageShell'
 import { YouTubeArchitectureDiagram } from './YouTubeArchitectureDiagram'
+import { YouTubeScaleFaq } from './YouTubeScaleFaq'
 import { YouTubeTestRun } from './YouTubeTestRun'
 import './YouTubeClonePage.css'
+
+function scrollSectionIntoView(event: FocusEvent<HTMLElement>) {
+  event.currentTarget.scrollIntoView({ behavior: 'smooth', block: 'start' })
+}
 
 const YouTubeHoloCanvas = lazy(() =>
   import('./YouTubeHoloCanvas').then((mod) => ({ default: mod.YouTubeHoloCanvas })),
@@ -133,25 +138,38 @@ const TALKING_POINTS = [
   'End-to-end product thinking, not just a CRUD demo',
   'Cloud-native patterns: S3 direct upload, SQS async jobs, Postgres metadata, JWT auth',
   'Separation of concerns with Clean Architecture',
+  'Scale from day one: API, workers, and storage can grow on separate axes',
   'Correctness under edge cases (abandon upload, retries, visibility, ownership)',
-  'Frontend UX polish (YouTube-like shell, progressive processing UI, owner menus)',
   'Automated testing discipline across unit, integration, and browser E2E',
 ]
 
 export function YouTubeClonePage() {
   const reduceMotion = useReducedMotion()
 
+  useEffect(() => {
+    const previous = document.title
+    document.title = 'YouTube Clone | Edbert Felix Lim'
+    return () => {
+      document.title = previous
+    }
+  }, [])
+
   return (
-    <ProjectPageShell>
-      <header className="ytc-hero">
+    <ProjectPageShell ariaLabel="YouTube Clone case study">
+      <header className="ytc-hero" aria-labelledby="ytc-hero-title">
         <motion.div
           className="ytc-hero__copy"
           initial={reduceMotion ? false : { opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: easeOut }}
         >
-          <span className="ytc-index">Side Project</span>
-          <GlitchText text="YouTube Clone" as="h1" className="ytc-title" />
+          <span className="ytc-index" tabIndex={0} onFocus={scrollSectionIntoView}>Side Project</span>
+          <GlitchText
+            text="YouTube Clone"
+            as="h1"
+            id="ytc-hero-title"
+            className="ytc-title"
+          />
           <p className="ytc-headline">
             Direct-to-S3 upload, async transcode, and visibility that holds up.
           </p>
@@ -194,7 +212,7 @@ export function YouTubeClonePage() {
         custom={0}
         variants={fadeUp}
       >
-        <span className="ytc-index">01 / Intent</span>
+        <span className="ytc-index" tabIndex={0} onFocus={scrollSectionIntoView}>01 / Intent</span>
         <h2 id="ytc-goals-title" className="ytc-block__title">
           Problem & goals
         </h2>
@@ -221,7 +239,7 @@ export function YouTubeClonePage() {
         custom={0.05}
         variants={fadeUp}
       >
-        <span className="ytc-index">02 / Architecture</span>
+        <span className="ytc-index" tabIndex={0} onFocus={scrollSectionIntoView}>02 / Architecture</span>
         <h2 id="ytc-arch-title" className="ytc-block__title">
           Upload path
         </h2>
@@ -253,7 +271,7 @@ export function YouTubeClonePage() {
         custom={0.05}
         variants={fadeUp}
       >
-        <span className="ytc-index">03 / Product</span>
+        <span className="ytc-index" tabIndex={0} onFocus={scrollSectionIntoView}>03 / Product</span>
         <h2 id="ytc-caps-title" className="ytc-block__title">
           Core capabilities
         </h2>
@@ -273,7 +291,7 @@ export function YouTubeClonePage() {
         custom={0.05}
         variants={fadeUp}
       >
-        <span className="ytc-index">04 / Security</span>
+        <span className="ytc-index" tabIndex={0} onFocus={scrollSectionIntoView}>04 / Security</span>
         <h2 id="ytc-vis-title" className="ytc-block__title">
           Visibility rules
         </h2>
@@ -284,6 +302,9 @@ export function YouTubeClonePage() {
 
         <div className="ytc-matrix-wrap">
           <table className="ytc-matrix">
+            <caption className="sr-only">
+              Visibility rules by video state across feed, watch, channel, and owner access
+            </caption>
             <thead>
               <tr>
                 <th scope="col">State</th>
@@ -317,13 +338,14 @@ export function YouTubeClonePage() {
         custom={0.05}
         variants={fadeUp}
       >
-        <span className="ytc-index">05 / Stack</span>
+        <span className="ytc-index" tabIndex={0} onFocus={scrollSectionIntoView}>05 / Stack</span>
         <h2 id="ytc-stack-title" className="ytc-block__title">
           Tech & structure
         </h2>
 
         <div className="ytc-stack__table-wrap">
           <table className="ytc-stack__table">
+            <caption className="sr-only">Technology stack by layer</caption>
             <tbody>
               {STACK.map((row) => (
                 <tr key={row.layer}>
@@ -355,7 +377,7 @@ export function YouTubeClonePage() {
         custom={0.05}
         variants={fadeUp}
       >
-        <span className="ytc-index">06 / Quality</span>
+        <span className="ytc-index" tabIndex={0} onFocus={scrollSectionIntoView}>06 / Quality</span>
         <h2 id="ytc-test-title" className="ytc-block__title">
           Testing strategy
         </h2>
@@ -368,6 +390,29 @@ export function YouTubeClonePage() {
       </motion.section>
 
       <motion.section
+        className="ytc-block ytc-scale"
+        aria-labelledby="ytc-scale-title"
+        initial={reduceMotion ? false : 'hidden'}
+        whileInView="visible"
+        viewport={{ once: true, margin: '-12%' }}
+        custom={0.05}
+        variants={fadeUp}
+      >
+        <span className="ytc-index" tabIndex={0} onFocus={scrollSectionIntoView}>
+          07 / Scale
+        </span>
+        <h2 id="ytc-scale-title" className="ytc-block__title">
+          Future scalability
+        </h2>
+        <p className="ytc-block__lede">
+          Upload, processing, and read paths are meant to grow on different axes. This is the
+          shape I would take the system next.
+        </p>
+
+        <YouTubeScaleFaq />
+      </motion.section>
+
+      <motion.section
         className="ytc-block ytc-points"
         aria-labelledby="ytc-points-title"
         initial={reduceMotion ? false : 'hidden'}
@@ -376,7 +421,9 @@ export function YouTubeClonePage() {
         custom={0.05}
         variants={fadeUp}
       >
-        <span className="ytc-index">07 / Takeaways</span>
+        <span className="ytc-index" tabIndex={0} onFocus={scrollSectionIntoView}>
+          08 / Takeaways
+        </span>
         <h2 id="ytc-points-title" className="ytc-block__title">
           What this demonstrates
         </h2>
@@ -387,7 +434,7 @@ export function YouTubeClonePage() {
         </ul>
       </motion.section>
 
-      <footer className="ytc-footer">
+      <footer className="ytc-footer" aria-label="Case study actions">
         <a
           href="https://github.com/edbert-fl/youtube-clone"
           className="ytc-cta__primary"
