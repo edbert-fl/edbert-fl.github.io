@@ -251,23 +251,49 @@
 }
 
 .work-card__links {
-  margin: 1rem 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin: 1.25rem 0 0;
   padding: 0;
   list-style: none;
 }
 
-.work-card__link {
+.work-card__btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.65rem 0.95rem;
   font-family: var(--mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.06em;
-  color: var(--work-accent);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   text-decoration: none;
-  border-bottom: 1px solid rgba(34, 211, 238, 0.35);
+  color: var(--work-text);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: transparent;
+  transition:
+    color 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease;
 }
 
-.work-card__link:hover {
-  color: #fff;
-  border-bottom-color: #fff;
+.work-card__btn:hover,
+.work-card__btn:focus-visible {
+  color: var(--work-accent);
+  border-color: var(--work-accent);
+}
+
+.work-card__btn--primary {
+  color: #050505;
+  background: var(--work-accent);
+  border-color: var(--work-accent);
+}
+
+.work-card__btn--primary:hover,
+.work-card__btn--primary:focus-visible {
+  color: #050505;
+  background: #67e8f9;
+  border-color: #67e8f9;
 }
 
 @media (max-width: 720px) {

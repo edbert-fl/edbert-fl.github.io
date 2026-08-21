@@ -1,6 +1,12 @@
-export type WorkArtwork = 'coin' | 'fridge' | 'research-graph' | 'livestock-pose' | 'marketing-chatbot'
+export type WorkArtwork =
+  | 'coin'
+  | 'fridge'
+  | 'research-graph'
+  | 'livestock-pose'
+  | 'marketing-chatbot'
+  | 'video-player'
 
-export type WorkCategory = 'commercial' | 'hackathon' | 'research'
+export type WorkCategory = 'commercial' | 'hackathon' | 'research' | 'personal'
 
 export interface WorkProject {
   id: string
@@ -16,6 +22,20 @@ export interface WorkProject {
 }
 
 export const WORK_PROJECTS: WorkProject[] = [
+  {
+    id: 'youtube-clone',
+    title: 'YouTube Clone',
+    badge: 'Side Project',
+    category: 'personal',
+    artwork: 'video-player',
+    description:
+      'Full-stack video platform inspired by YouTube: register, upload, async processing into low- and high-quality renditions with thumbnails, browse a public feed, search by title, visit channel pages, and watch with a quality toggle, including public, unlisted, and private visibility. Built with a clean-architecture .NET backend, Next.js frontend, Docker local development, and AWS for storage, messaging, and cloud-ready auth/data patterns.',
+    tech: ['.NET', 'Next.js', 'Docker', 'AWS', 'S3', 'SQS'],
+    links: [
+      { label: 'Learn more', url: '/work/youtube-clone' },
+      { label: 'GitHub', url: 'https://github.com/edbert-fl/youtube-clone' },
+    ],
+  },
   {
     id: 'crypto-gateway',
     title: 'Cryptarity',

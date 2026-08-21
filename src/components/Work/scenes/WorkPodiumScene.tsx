@@ -13,6 +13,7 @@ import { LivestockPoseArt } from './art/LivestockPoseArt'
 import { MarketingChatbotArt } from './art/MarketingChatbotArt'
 import { ResearchAgentArt } from './art/ResearchAgentArt'
 import { CoinArt } from './art/CoinArt'
+import { VideoPlayerArt } from './art/VideoPlayerArt'
 
 const ACCENT = '#22d3ee'
 const MUTED = '#f4f4f5'
@@ -93,6 +94,11 @@ function WorkPodium({
   return (
     <group ref={groupRef} position={[x, -0.35, 0]}>
       <Podium active={active} hasArtwork={Boolean(project.artwork)} />
+      {project.artwork === 'video-player' && (
+        <FaceCamera>
+          <VideoPlayerArt active={active} />
+        </FaceCamera>
+      )}
       {project.artwork === 'coin' && <CoinArt active={active} />}
       {project.artwork === 'fridge' && (
         <FaceCamera>

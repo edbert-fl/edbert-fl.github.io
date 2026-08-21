@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import type { WorkProject } from '../../data/work'
 
 interface WorkCardProps {
@@ -6,6 +7,10 @@ interface WorkCardProps {
   focus: number
   onFocus?: () => void
   onBlur?: () => void
+}
+
+function isInternalPath(url: string) {
+  return url.startsWith('/')
 }
 
 export function WorkCard({ project, index, focus, onFocus, onBlur }: WorkCardProps) {
@@ -57,19 +62,30 @@ export function WorkCard({ project, index, focus, onFocus, onBlur }: WorkCardPro
 
         {project.links && project.links.length > 0 && (
           <ul className="work-card__links">
-            {project.links.map((link) => (
-              <li key={link.url}>
-                <a
-                  href={link.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="work-card__link"
-                >
-                  {link.label}
-                  <span className="sr-only"> (opens in new tab)</span>
-                </a>
-              </li>
-            ))}
+            {project.links.map((link, linkIndex) => {
+              const className =
+                linkIndex === 0 ? 'work-card__btn work-card__btn--primary' : 'work-card__btn'
+
+              return (
+                <li key={link.url}>
+                  {isInternalPath(link.url) ? (
+                    <Link to={link.url} className={className}>
+                      {link.label}
+                    </Link>
+                  ) : (
+                    <a
+                      href={link.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={className}
+                    >
+                      {link.label}
+                      <span className="sr-only"> (opens in new tab)</span>
+                    </a>
+                  )}
+                </li>
+              )
+            })}
           </ul>
         )}
       </div>
