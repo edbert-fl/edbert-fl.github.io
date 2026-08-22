@@ -65,8 +65,9 @@ const PRINCIPLES = [
 const CAPABILITIES = [
   'Register / sign in / sign out',
   'Create upload session → PUT to S3 → complete → enqueue transcode',
-  'Worker produces LQ, HQ, and a thumbnail',
-  'Watch page with quality switch (Low/High), processing/failed states',
+  'Worker produces LQ/HQ MP4s, thumbnail, and an HLS ladder',
+  'Watch via adaptive HLS (hls.js) for public/unlisted Ready videos',
+  'Private watch stays progressive MP4 with Low/High controls',
   'Public home feed + title search',
   'Channel page by slug',
   'Library (“My videos”) with owner controls',
@@ -122,15 +123,15 @@ const LAYERS = [
 ]
 
 const STACK = [
-  { layer: 'Frontend', tech: 'Next.js 15 (App Router), React 19, TypeScript, CSS modules' },
-  { layer: 'API', tech: 'ASP.NET Core (.NET 8), minimal APIs, JWT auth, OpenAPI/Swagger' },
-  { layer: 'Worker', tech: '.NET 8 background service + FFmpeg (LQ/HQ + thumbnail)' },
-  { layer: 'Domain', tech: 'Rich entities, status machine (Uploading → Uploaded → Processing → Ready / Failed)' },
+  { layer: 'Frontend', tech: 'Next.js 15 (App Router), React 19, TypeScript, CSS modules, hls.js' },
+  { layer: 'API', tech: 'ASP.NET Core (.NET 8), minimal APIs, JWT auth, OpenAPI/Swagger, HLS proxy routes' },
+  { layer: 'Worker', tech: '.NET 8 background service + FFmpeg (LQ/HQ MP4, thumbnail, HLS package)' },
+  { layer: 'Domain', tech: 'Rich entities, status machine (Uploading → Uploaded → Processing → Ready / Failed); Ready requires HLS master' },
   { layer: 'Data', tech: 'PostgreSQL + EF Core (migrations, repositories)' },
-  { layer: 'Object storage', tech: 'Amazon S3 (pre-signed PUT/GET, soft-delete cleanup)' },
-  { layer: 'Job queue', tech: 'Amazon SQS (transcode jobs + failure/retry handling)' },
+  { layer: 'Object storage', tech: 'Amazon S3 / MinIO (pre-signed PUT/GET, HLS prefix, soft-delete cleanup)' },
+  { layer: 'Job queue', tech: 'Amazon SQS / ElasticMQ (transcode jobs, request correlation, failure/retry handling)' },
   { layer: 'Auth', tech: 'Password registration/login issuing JWTs; Cognito-style sub claims' },
-  { layer: 'Local', tech: 'Docker Compose (API, worker, web, Postgres, supporting services)' },
+  { layer: 'Local', tech: 'Docker Compose (API, worker, web, Postgres, MinIO, queue, CloudWatch Logs)' },
   { layer: 'E2E', tech: 'Playwright (Chromium)' },
 ]
 
@@ -161,9 +162,9 @@ const TALKING_POINTS = [
     body: 'Abandon upload, retries, visibility, and ownership covered.',
   },
   {
-    id: 'testing',
-    title: 'Test discipline',
-    body: 'Unit, integration, and Playwright E2E across the stack.',
+    id: 'streaming',
+    title: 'Adaptive streaming',
+    body: 'HLS after encode; CloudWatch logs when the async pipeline fails.',
   },
 ] as const
 
@@ -223,11 +224,11 @@ function TalkingPointIcon({ id }: { id: TalkingPointId }) {
           <path d="m9.2 12.2 1.9 1.9 3.8-3.9" />
         </svg>
       )
-    case 'testing':
+    case 'streaming':
       return (
         <svg {...common}>
-          <rect x="4.5" y="3.5" width="15" height="17" rx="1.5" />
-          <path d="m8 9 1.6 1.6L12.8 7.5M8 14h8M8 17h5" />
+          <path d="M4 8.5h3l2.5-3.5 3 7 2.5-3.5H20" />
+          <rect x="3.5" y="14.5" width="17" height="5" rx="1" />
         </svg>
       )
   }
@@ -272,7 +273,7 @@ export function YouTubeClonePage() {
             className="ytc-title"
           />
           <p className="ytc-headline">
-            Direct-to-S3 upload, async transcode, and visibility that holds up.
+            Direct-to-S3 upload, async transcode, adaptive HLS, and visibility that holds up.
           </p>
           <div className="ytc-cta">
             <a
@@ -363,10 +364,17 @@ export function YouTubeClonePage() {
         <p className="ytc-block__lede">
           One video’s journey: request a session, put the file straight to S3, complete the
           upload so a job lands on the queue, then let the worker drain that queue into LQ/HQ
-          renditions and a Ready status.
+          MP4s, an HLS ladder, and Ready. Public and unlisted watch then streams adaptively
+          through the API (hls.js), not a single progressive download.
         </p>
 
         <YouTubeArchitectureDiagram />
+
+        <p className="ytc-arch__note">
+          Each enqueue carries a <code>requestId</code> into structured logs (CloudWatch locally,
+          same APIs in AWS) so when upload, queue, or transcode fails, the trail shows where it
+          broke. Pipelines go wrong; you need a way to see it.
+        </p>
 
         <h3 className="ytc-subhead">Design principles</h3>
         <ul className="ytc-principles">

@@ -15,14 +15,14 @@ const STEPS = [
   'Direct S3 PUT',
   'Complete → enqueue (back)',
   'Dequeue (front)',
-  'Encode → Ready',
+  'Encode · HLS → Ready',
 ] as const
 
 const easeOut = [0.22, 1, 0.36, 1] as const
 
 /**
  * Upload-path schematic unique to the YouTube Clone case study.
- * One video: session → S3 PUT → complete/enqueue → dequeue → encode → Ready.
+ * One video: session → S3 PUT → complete/enqueue → dequeue → encode + HLS → Ready.
  */
 export function YouTubeArchitectureDiagram() {
   const reduceMotion = useReducedMotion()
@@ -40,7 +40,7 @@ export function YouTubeArchitectureDiagram() {
       ]
         .filter(Boolean)
         .join(' ')}
-      aria-label="Upload flow for one video. Step 1: browser creates an upload session with the API, which stores a video row in Postgres. Step 2: browser uploads the file directly to S3 with a pre-signed URL. Step 3: browser completes the upload; the API enqueues a transcode job at the back of an SQS queue. Step 4: the worker dequeues from the front of the queue. Step 5: the worker writes LQ, HQ, and thumbnail objects to S3 and marks the video Ready in Postgres."
+      aria-label="Upload flow for one video. Step 1: browser creates an upload session with the API, which stores a video row in Postgres. Step 2: browser uploads the file directly to S3 with a pre-signed URL. Step 3: browser completes the upload; the API enqueues a transcode job at the back of an SQS queue. Step 4: the worker dequeues from the front of the queue. Step 5: the worker writes MP4 renditions, an HLS ladder, and a thumbnail to S3 and marks the video Ready in Postgres once the HLS master exists."
     >
       <ol className="ytc-schematic__steps">
         {STEPS.map((label, index) => (
@@ -143,7 +143,7 @@ export function YouTubeArchitectureDiagram() {
             {/* Worker → Postgres Ready: down, left, up */}
             <path
               id="path-ready"
-              d="M740 520 V555 H530 V336"
+              d="M765 520 V555 H530 V336"
               stroke="#22d3ee"
               strokeOpacity="0.5"
               strokeLinecap="round"
@@ -161,7 +161,7 @@ export function YouTubeArchitectureDiagram() {
                 M650 100 H718
                 M820 360 V418
                 M640 470 H502
-                M740 520 V555 H530 V336
+                M765 520 V555 H530 V336
               "
               fill="none"
               stroke="none"
@@ -273,7 +273,7 @@ export function YouTubeArchitectureDiagram() {
               video row · status
             </text>
             <text x="80" y="76" textAnchor="middle" className="ytc-schematic__sub">
-              Uploading → Ready
+              Uploading → … → Ready
             </text>
           </g>
 
@@ -292,7 +292,7 @@ export function YouTubeArchitectureDiagram() {
               02 original object
             </text>
             <text x="105" y="76" textAnchor="middle" className="ytc-schematic__sub">
-              05 LQ · HQ · thumbnail
+              05 HLS · MP4 · thumbnail
             </text>
           </g>
 
@@ -362,19 +362,19 @@ export function YouTubeArchitectureDiagram() {
           {/* Worker */}
           <g className="ytc-schematic__block" style={{ ['--ytc-enter-delay' as string]: '0.36s' }} transform="translate(640, 420)">
             <rect
-              width="200"
+              width="250"
               height="100"
               rx="2"
               className="ytc-schematic__node ytc-schematic__node--worker"
             />
-            <text x="100" y="34" textAnchor="middle" className="ytc-schematic__title">
+            <text x="125" y="34" textAnchor="middle" className="ytc-schematic__title">
               Worker
             </text>
-            <text x="100" y="56" textAnchor="middle" className="ytc-schematic__sub">
-              FFmpeg · LQ / HQ / thumb
+            <text x="125" y="56" textAnchor="middle" className="ytc-schematic__sub">
+              FFmpeg · MP4 + HLS · thumb
             </text>
-            <text x="100" y="78" textAnchor="middle" className="ytc-schematic__hint">
-              write S3 · mark Ready
+            <text x="125" y="78" textAnchor="middle" className="ytc-schematic__hint">
+              write S3 · Ready when HLS exists
             </text>
           </g>
 

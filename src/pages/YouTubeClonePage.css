@@ -414,6 +414,26 @@
   color: var(--project-body);
 }
 
+.ytc-arch__note {
+  margin: 0 0 2.25rem;
+  max-width: 62ch;
+  padding: 1rem 1.1rem;
+  border-left: 2px solid var(--project-accent);
+  background: rgba(34, 211, 238, 0.04);
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  line-height: 1.65;
+  color: var(--project-body);
+}
+
+.ytc-arch__note code {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--project-accent);
+  background: transparent;
+  padding: 0;
+}
+
 .ytc-points__list {
   margin: 0;
   padding: 0;
