@@ -42,8 +42,8 @@ const SCALE_FAQ: ScaleFaqItem[] = [
     id: 'cdn',
     question: 'How do watch and thumbnails stay fast at scale?',
     paragraphs: [
-      'Put CloudFront (or another CDN) in front of S3 for watch media and thumbnails so the API and Postgres stay off the playback path. The origin keeps the full library; edges only hold what regional demand makes hot.',
-      'A viral title in Sydney can live on the ap-southeast-2 edge while a long-tail miss in Virginia still fetches from S3. Not every object is pushed to every region.',
+      'Public and unlisted Ready already play through adaptive HLS. Next is putting CloudFront (or another CDN) in front of the media path so repeat GETs for playlists and segments stay off the API, while edges only hold what regional demand makes hot.',
+      'Private HLS still waits on signed-cookie CDN work; until then private watch stays progressive MP4.',
     ],
     visual: 'cdn',
   },
